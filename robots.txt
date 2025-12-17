@@ -1,0 +1,10 @@
+# Robots.txt for The Pollinator's Return
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://pollinator.forteen.in/sitemap.xml
+
+# Crawl-delay (be gentle with our bees)
+Crawl-delay: 1

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pollinator's Return | An Interactive Experience</title>
+    <meta name="description" content="When the bees came back, so did the desert. A 12-minute interactive exploration of natural design and human attention.">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #c66b54;
+            --sage: #8a9a7b;
+            --gold: #d4a574;
+            --purple: #8b7ba8;
+            --honey: #e8b55f;
+            --cream: #f5f1e8;
+            --dust: #b8a99a;
+            --deep-sage: #5a6b52;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f9f6ef 100%);
+            color: #3a3331;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 154, 123, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 123, 168, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(245, 241, 232, 0.95), rgba(245, 241, 232, 0));
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 400;
+        }
+        
+        .nav-cta {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--deep-sage) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(90, 107, 82, 0.3);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(90, 107, 82, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 120px 40px 60px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-text {
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .series-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 600;
+            color: var(--deep-sage);
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+        
+        .hero-tagline {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--dust);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+        
+        .hero-description {
+            font-size: 1.2rem;
+            color: #4a4240;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+        
+        .hero-cta {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            padding: 20px 50px;
+            background: linear-gradient(135deg, var(--purple) 0%, #9a88b5 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            box-shadow: 0 10px 30px rgba(139, 123, 168, 0.3);
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(139, 123, 168, 0.4);
+        }
+        
+        .hero-meta {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: var(--dust);
+        }
+        
+        /* Hero Visual */
+        .hero-visual {
+            width: 100%;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fadeIn 1.5s ease forwards;
+        }
+        
+        .flower-hero {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            animation: gentleFloat 8s ease-in-out infinite;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--purple) 0%, #9a88b5 100%);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.7;
+        }
+        
+        .petal:nth-child(1) { transform: rotate(0deg) translateX(60px); }
+        .petal:nth-child(2) { transform: rotate(72deg) translateX(60px); }
+        .petal:nth-child(3) { transform: rotate(144deg) translateX(60px); }
+        .petal:nth-child(4) { transform: rotate(216deg) translateX(60px); }
+        .petal:nth-child(5) { transform: rotate(288deg) translateX(60px); }
+        
+        .flower-center {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: var(--honey);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 40px rgba(232, 181, 95, 0.6);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .bee-hero {
+            position: absolute;
+            font-size: 120px;
+            top: -40px;
+            right: -40px;
+            filter: drop-shadow(0 15px 30px rgba(232, 181, 95, 0.4));
+            animation: beeFloat 5s ease-in-out infinite;
+        }
+        
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        @keyframes beeFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(15px, -15px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* About Section */
+        .about {
+            padding: 120px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--deep-sage);
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+        
+        .about-text {
+            font-size: 1.3rem;
+            color: #4a4240;
+            margin-bottom: 30px;
+            line-height: 2;
+        }
+        
+        .about-text strong {
+            color: var(--terracotta);
+            font-weight: 600;
+        }
+        
+        /* Story Section */
+        .story {
+            padding: 120px 40px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .story-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 50px;
+            margin-top: 60px;
+        }
+        
+        .story-card {
+            text-align: center;
+        }
+        
+        .story-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .story-year {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--sage);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .story-description {
+            font-size: 1.1rem;
+            color: #4a4240;
+            line-height: 1.7;
+        }
+        
+        /* Details Section */
+        .details {
+            padding: 120px 40px;
+        }
+        
+        .details-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .detail-item {
+            margin-bottom: 50px;
+        }
+        
+        .detail-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--sage);
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .detail-text {
+            font-size: 1.2rem;
+            color: #4a4240;
+            line-height: 1.8;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 80px 40px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .footer-tagline {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--dust);
+            margin-bottom: 30px;
+        }
+        
+        .footer-links {
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: var(--dust);
+        }
+        
+        .footer-links a {
+            color: var(--sage);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--deep-sage);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .hero-visual {
+                height: 400px;
+            }
+            
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+            
+            .hero {
+                padding: 100px 20px 40px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-tagline {
+                font-size: 1.2rem;
+            }
+            
+            .hero-description {
+                font-size: 1.1rem;
+            }
+            
+            .hero-visual {
+                height: 300px;
+            }
+            
+            .flower-hero {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .petal {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .petal:nth-child(1) { transform: rotate(0deg) translateX(40px); }
+            .petal:nth-child(2) { transform: rotate(72deg) translateX(40px); }
+            .petal:nth-child(3) { transform: rotate(144deg) translateX(40px); }
+            .petal:nth-child(4) { transform: rotate(216deg) translateX(40px); }
+            .petal:nth-child(5) { transform: rotate(288deg) translateX(40px); }
+            
+            .flower-center {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .bee-hero {
+                font-size: 80px;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .about, .story, .details {
+                padding: 80px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Forteen Mind Labs</div>
+        <a href="./episode.html" class="nav-cta">Experience Now</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="series-label">An Interactive Experience</div>
+                <h1 class="hero-title">The Pollinator's Return</h1>
+                <p class="hero-tagline">When the bees came back, so did the desert.<br>What comes back when you do?</p>
+                <p class="hero-description">
+                    A 12-minute exploration of attention, presence, and natural design. Using the true story of Nevada's desert restoration, we examine what happens when you remove—and restore—the pollinators from human experience.
+                </p>
+                <a href="./episode.html" class="hero-cta">Begin the Journey</a>
+                <p class="hero-meta">12 minutes · 6 segments · Free, no signup</p>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="flower-hero">
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="flower-center"></div>
+                </div>
+                <div class="bee-hero">🐝</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="about">
+        <div class="about-content">
+            <h2 class="section-title">You Don't Need to Be Fixed</h2>
+            <p class="about-text">
+                In 2019, scientists in Nevada did something counterintuitive to restore a dying desert ecosystem.
+            </p>
+            <p class="about-text">
+                They didn't plant more seeds. They didn't optimize the soil. They didn't engineer better alfalfa.
+            </p>
+            <p class="about-text">
+                <strong>They brought back the bees.</strong>
+            </p>
+            <p class="about-text">
+                The desert didn't need intervention. It needed its natural connections restored.
+            </p>
+            <p class="about-text">
+                This is a story about pollinators. And what happens when you remove them.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Story Section -->
+    <section class="story">
+        <div class="story-content">
+            <h2 class="section-title">The Restoration</h2>
+            <div class="story-grid">
+                <div class="story-card">
+                    <span class="story-icon">🌾</span>
+                    <div class="story-year">Year 1</div>
+                    <p class="story-description">
+                        Bees reintroduced. Some pollination. A few seed pods formed.
+                    </p>
+                </div>
+                <div class="story-card">
+                    <span class="story-icon">🌸</span>
+                    <div class="story-year">Year 2</div>
+                    <p class="story-description">
+                        More bees arrived. More seeds. The cycle strengthened.
+                    </p>
+                </div>
+                <div class="story-card">
+                    <span class="story-icon">🌺</span>
+                    <div class="story-year">Year 3</div>
+                    <p class="story-description">
+                        The purple started returning. The desert remembered how to bloom.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Details Section -->
+    <section class="details">
+        <div class="details-content">
+            <h2 class="section-title">What You'll Discover</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">The Pattern</div>
+                <p class="detail-text">
+                    What are the pollinators in human experience? Boredom pollinated creativity. Silence pollinated thought. Solitude pollinated self-knowledge. Then we removed them. We called it progress.
+                </p>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">The Recognition</div>
+                <p class="detail-text">
+                    The flowers still bloom. You're still functional. Still productive. But something's missing. The desert faded not from lack of water, but from lack of connection.
+                </p>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">The Return</div>
+                <p class="detail-text">
+                    The bee doesn't try to save the desert. The bee seeks nectar. Pollination is the side effect. What if presence works the same way?
+                </p>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">The Experience</div>
+                <p class="detail-text">
+                    Six interactive segments. Pattern recognition prompts. Unlockable insights. No forced outcomes. Just observation. This isn't about what to do. It's about what to see.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">Forteen Mind Labs</div>
+        <p class="footer-tagline">Pattern recognition, not prescription.</p>
+        <div class="footer-links">
+            <a href="https://github.com/forteen-mind-labs">GitHub</a>
+            <a href="mailto:hello@forteen.in">Contact</a>
+            <a href="./about.html">About</a>
+        </div>
+        <p style="margin-top: 40px; color: var(--dust); font-size: 0.9rem;">
+            © 2025 Forteen Mind Labs. Like sushi, we're an acquired taste.
+        </p>
+    </footer>
+</body>
+</html>

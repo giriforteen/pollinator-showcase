@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | The Pollinator's Return</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage: #8a9a7b;
+            --cream: #f5f1e8;
+            --dust: #b8a99a;
+            --deep-sage: #5a6b52;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f9f6ef 100%);
+            color: #3a3331;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 600px;
+        }
+        
+        .icon {
+            font-size: 120px;
+            margin-bottom: 30px;
+            opacity: 0.5;
+        }
+        
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--deep-sage);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        p {
+            font-size: 1.3rem;
+            color: var(--dust);
+            font-style: italic;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        
+        a {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--deep-sage) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+            box-shadow: 0 8px 25px rgba(90, 107, 82, 0.3);
+        }
+        
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(90, 107, 82, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .icon {
+                font-size: 80px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🐝</div>
+        <h1>Lost in the Desert</h1>
+        <p>
+            The page you're looking for seems to have wandered off.<br>
+            Even bees get lost sometimes.
+        </p>
+        <a href="/">Return Home</a>
+    </div>
+</body>
+</html>

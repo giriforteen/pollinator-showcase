@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pollinator's Return</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #c66b54;
+            --sage: #8a9a7b;
+            --gold: #d4a574;
+            --purple: #8b7ba8;
+            --honey: #e8b55f;
+            --cream: #f5f1e8;
+            --dust: #b8a99a;
+            --deep-sage: #5a6b52;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f9f6ef 50%, var(--cream) 100%);
+            color: #3a3331;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 154, 123, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 123, 168, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            z-index: 1;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(138, 154, 123, 0.1);
+            z-index: 100;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sage), var(--purple));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Segments container */
+        .segment {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .segment.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header */
+        .episode-header {
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .series-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .episode-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            color: var(--deep-sage);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .segment-subtitle {
+            font-size: 1.1rem;
+            color: var(--dust);
+            font-style: italic;
+        }
+        
+        /* Visual containers */
+        .visual-container {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(139, 123, 168, 0.15);
+        }
+        
+        /* Segment 1: Alfalfa field */
+        .alfalfa-field {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                #e8dcc8 0%, #d4c4b0 20%, var(--purple) 40%,
+                #9a88b5 60%, var(--sage) 80%, var(--deep-sage) 100%
+            );
+            position: relative;
+            transition: all 3s ease;
+        }
+        
+        .alfalfa-field.faded {
+            filter: saturate(0.2) brightness(1.1);
+        }
+        
+        .bee-indicator {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--honey);
+            border-radius: 50%;
+            animation: beeFlight 4s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(232, 181, 95, 0.6);
+        }
+        
+        .bee-indicator.fade-out {
+            animation: beeDisappear 2s ease forwards;
+        }
+        
+        @keyframes beeFlight {
+            0%, 100% { transform: translate(0, 0); opacity: 0.8; }
+            25% { transform: translate(40px, -20px); opacity: 1; }
+            50% { transform: translate(80px, 10px); opacity: 0.9; }
+            75% { transform: translate(40px, 30px); opacity: 1; }
+        }
+        
+        @keyframes beeDisappear {
+            to { opacity: 0; transform: scale(0); }
+        }
+        
+        /* Segment 2: Bee anatomy */
+        .bee-anatomy {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f9f6ef 0%, var(--cream) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .bee-anatomy::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(139, 123, 168, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.5; }
+        }
+        
+        .bee-icon {
+            font-size: 120px;
+            filter: drop-shadow(0 10px 30px rgba(232, 181, 95, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* Segment 3: Human desert */
+        .human-desert {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8dcc8 0%, #d4c4b0 100%);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .isolated-flower {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--purple);
+            opacity: 0.4;
+            filter: saturate(0.5);
+            position: relative;
+        }
+        
+        .isolated-flower::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed rgba(138, 154, 123, 0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(2);
+        }
+        
+        /* Segment 4: Restoration timeline */
+        .restoration-timeline {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right,
+                #d4c4b0 0%,
+                #c5b5a5 33%,
+                var(--sage) 66%,
+                var(--purple) 100%
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            color: var(--deep-sage);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: appear 1s ease forwards;
+            opacity: 0;
+        }
+        
+        .timeline-marker:nth-child(1) { animation-delay: 0.3s; }
+        .timeline-marker:nth-child(2) { animation-delay: 0.6s; }
+        .timeline-marker:nth-child(3) { animation-delay: 0.9s; }
+        
+        @keyframes appear {
+            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.5); }
+        }
+        
+        /* Segment 5: Cascade effect */
+        .cascade-visual {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--honey) 0%, var(--purple) 30%, var(--sage) 60%, var(--deep-sage) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cascade-ring {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: ripple 3s ease-out infinite;
+        }
+        
+        .cascade-ring:nth-child(1) { width: 100px; height: 100px; animation-delay: 0s; }
+        .cascade-ring:nth-child(2) { width: 150px; height: 150px; animation-delay: 0.5s; }
+        .cascade-ring:nth-child(3) { width: 200px; height: 200px; animation-delay: 1s; }
+        .cascade-ring:nth-child(4) { width: 250px; height: 250px; animation-delay: 1.5s; }
+        
+        @keyframes ripple {
+            0% { opacity: 1; transform: scale(0.3); }
+            100% { opacity: 0; transform: scale(1); }
+        }
+        
+        /* Segment 6: Blooming flower */
+        .bloom-visual {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cream) 0%, #f9f6ef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .flower-bloom {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            animation: bloomGrow 3s ease-in-out infinite;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--purple);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.8;
+            animation: petalOpen 3s ease-in-out infinite;
+        }
+        
+        .petal:nth-child(1) { transform: rotate(0deg) translateX(25px); }
+        .petal:nth-child(2) { transform: rotate(72deg) translateX(25px); }
+        .petal:nth-child(3) { transform: rotate(144deg) translateX(25px); }
+        .petal:nth-child(4) { transform: rotate(216deg) translateX(25px); }
+        .petal:nth-child(5) { transform: rotate(288deg) translateX(25px); }
+        
+        .flower-center {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--honey);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(232, 181, 95, 0.5);
+        }
+        
+        @keyframes bloomGrow {
+            0%, 100% { transform: scale(0.9); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes petalOpen {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.5; }
+        }
+        
+        /* Narration */
+        .narration {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: #4a4240;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .narration p {
+            margin-bottom: 1.5em;
+        }
+        
+        .emphasis {
+            font-style: italic;
+            color: var(--terracotta);
+            font-weight: 600;
+        }
+        
+        /* Interactive section */
+        .interactive-section {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin: 60px 0;
+            border: 1px solid rgba(138, 154, 123, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        
+        .interactive-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--deep-sage);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .interactive-prompt {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--dust);
+            font-style: italic;
+            margin-bottom: 35px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1rem;
+            color: #4a4240;
+        }
+        
+        .option-card:hover {
+            border-color: var(--sage);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(138, 154, 123, 0.15);
+        }
+        
+        .option-card.selected {
+            border-color: var(--purple);
+            background: linear-gradient(135deg, rgba(139, 123, 168, 0.05) 0%, rgba(139, 123, 168, 0.1) 100%);
+        }
+        
+        .option-card.selected::before {
+            content: '✓ ';
+            color: var(--purple);
+            font-weight: bold;
+        }
+        
+        /* Text input */
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(138, 154, 123, 0.2);
+            border-radius: 8px;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(138, 154, 123, 0.1);
+        }
+        
+        /* Pro tip */
+        .protip {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(232, 181, 95, 0.1) 100%);
+            border-left: 4px solid var(--honey);
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .protip.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .protip-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--terracotta);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .protip-text {
+            font-size: 1.1rem;
+            color: #5a5250;
+            font-style: italic;
+            line-height: 1.7;
+        }
+        
+        /* Navigation buttons */
+        .segment-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--deep-sage) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(90, 107, 82, 0.3);
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(90, 107, 82, 0.4);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn.next {
+            margin-left: auto;
+        }
+        
+        /* Completion dashboard */
+        .completion-dashboard {
+            background: linear-gradient(135deg, rgba(139, 123, 168, 0.1), rgba(138, 154, 123, 0.1));
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .completion-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--deep-sage);
+            margin-bottom: 20px;
+        }
+        
+        .completion-message {
+            font-size: 1.2rem;
+            color: var(--dust);
+            font-style: italic;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .badges-collected {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .badge {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+        }
+        
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .badge-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--deep-sage);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+            
+            .episode-title {
+                font-size: 2.2rem;
+            }
+            
+            .narration {
+                font-size: 1.1rem;
+            }
+            
+            .visual-container {
+                height: 200px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .segment-navigation {
+                flex-direction: column;
+            }
+            
+            .nav-btn.next {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    
+    <div class="container">
+        <!-- SEGMENT 1: THE DESERT'S SILENCE -->
+        <section class="segment active" id="segment0">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 1: The Desert's Silence</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="alfalfa-field" id="alfalfaField">
+                    <div class="bee-indicator" style="left: 20%; top: 30%;"></div>
+                    <div class="bee-indicator" style="left: 50%; top: 45%; animation-delay: 1s;"></div>
+                    <div class="bee-indicator" style="left: 75%; top: 35%; animation-delay: 2s;"></div>
+                    <div class="bee-indicator" style="left: 35%; top: 60%; animation-delay: 1.5s;"></div>
+                    <div class="bee-indicator" style="left: 65%; top: 55%; animation-delay: 0.5s;"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>In the Nevada desert, there was once a sea of purple.</p>
+                <p>Wild alfalfa stretched across the valley floor. Ancient. Stubborn.</p>
+                <p>And then, one season, the purple disappeared.</p>
+                <p>The alfalfa still grew. The flowers still bloomed. But something was missing.</p>
+                <p class="emphasis">The bees were gone.</p>
+                <p>The desert didn't collapse overnight. It just... faded.</p>
+                <p class="emphasis">This is what happens when you remove the pollinators.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The First Removal</h2>
+                <p class="interactive-prompt">What was removed from your life when you weren't looking?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card" data-option="time">Time to think</div>
+                    <div class="option-card" data-option="boredom">Moments of boredom</div>
+                    <div class="option-card" data-option="play">Unstructured play</div>
+                    <div class="option-card" data-option="silence">Silence</div>
+                    <div class="option-card" data-option="solitude">Solitude</div>
+                    <div class="option-card" data-option="waiting">Waiting</div>
+                </div>
+                
+                <div class="protip" data-protip="0">
+                    <div class="protip-label">Pro Tip #1</div>
+                    <div class="protip-text">Absence doesn't announce itself. It just leaves space where something used to be.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" disabled>← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Bite →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 2: THE BEE'S PURPOSE -->
+        <section class="segment" id="segment1">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 2: The Bee's Purpose</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="bee-anatomy">
+                    <div class="bee-icon">🐝</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>Here's what a bee is not doing:</p>
+                <p>It's not trying to save the ecosystem.<br>
+                It's not practicing mindfulness.<br>
+                It's not following a protocol.</p>
+                <p>The bee seeks nectar. That's it. Simple. Clear. Instinctual.</p>
+                <p class="emphasis">Pollination is not the bee's job. Pollination is the bee's side effect.</p>
+                <p>The bee follows its design. The ecosystem benefits.</p>
+                <p>What if attention works the same way?</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">What's Your Nectar?</h2>
+                <p class="interactive-prompt">What activity makes you forget to check your phone?</p>
+                
+                <textarea class="text-input" placeholder="Cooking without a recipe, playing with my child, fixing broken things, running until it hurts..."></textarea>
+                
+                <div class="protip" data-protip="1">
+                    <div class="protip-label">Pro Tip #2</div>
+                    <div class="protip-text">The bee doesn't need an app to find flowers. You don't need an app to find presence. You need to find your nectar.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Bite →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 3: THE HUMAN DESERT -->
+        <section class="segment" id="segment2">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 3: The Human Desert</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="human-desert">
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                    <div class="isolated-flower"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>Let's talk about your desert.</p>
+                <p>Somewhere between childhood and now, the pollinators left.</p>
+                <p>Boredom used to pollinate creativity.<br>
+                Silence used to pollinate thought.<br>
+                Solitude used to pollinate self-knowledge.</p>
+                <p class="emphasis">Then we removed them. We called it progress.</p>
+                <p>Every gap filled. Every silence occupied. Every moment optimized.</p>
+                <p>The flowers still bloom. You still function.<br>
+                But something's missing.</p>
+                <p class="emphasis">You're the alfalfa field, blooming alone.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Your Desert Scan</h2>
+                <p class="interactive-prompt">What blooms in your life but produces no seeds?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Conversations that leave no memory</div>
+                    <div class="option-card">Accomplishments that create no satisfaction</div>
+                    <div class="option-card">Experiences that generate no stories</div>
+                    <div class="option-card">Relationships that build no depth</div>
+                    <div class="option-card">Work that accumulates no meaning</div>
+                </div>
+                
+                <div class="protip" data-protip="2">
+                    <div class="protip-label">Pro Tip #3</div>
+                    <div class="protip-text">The desert didn't die from lack of water. It died from lack of connection. So did you.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Bite →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 4: THE REINTRODUCTION -->
+        <section class="segment" id="segment3">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 4: The Reintroduction</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="restoration-timeline">
+                    <div class="timeline-marker">Y1</div>
+                    <div class="timeline-marker">Y2</div>
+                    <div class="timeline-marker">Y3</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>In 2019, scientists did something radical in Nevada.</p>
+                <p>They didn't add more alfalfa.<br>
+                They didn't engineer better seeds.</p>
+                <p class="emphasis">They brought back the bees.</p>
+                <p>Not all the bees. Just enough. The right species. At the right time.</p>
+                <p>Year 1: Some pollination. A few seed pods.<br>
+                Year 2: More bees. More seeds.<br>
+                Year 3: The purple started returning.</p>
+                <p>They didn't fix the desert. <span class="emphasis">They restored the connection.</span></p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">What Kills Your Pollinators?</h2>
+                <p class="interactive-prompt">Identify what's in your habitat that shouldn't be.</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Phone by the bed</div>
+                    <div class="option-card">Notifications during work</div>
+                    <div class="option-card">Background noise always on</div>
+                    <div class="option-card">Multitasking as default</div>
+                    <div class="option-card">Zero unstructured time</div>
+                    <div class="option-card">No gaps between activities</div>
+                </div>
+                
+                <div class="protip" data-protip="3">
+                    <div class="protip-label">Pro Tip #4</div>
+                    <div class="protip-text">The bees didn't return because the desert begged. They returned because the habitat became livable again.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Bite →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 5: THE SIDE EFFECTS -->
+        <section class="segment" id="segment4">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 5: The Side Effects</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="cascade-visual">
+                    <div class="cascade-ring"></div>
+                    <div class="cascade-ring"></div>
+                    <div class="cascade-ring"></div>
+                    <div class="cascade-ring"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>When the bees returned, so did the butterflies.<br>
+                When the butterflies returned, so did the birds.<br>
+                When the birds returned, the ecosystem balanced.</p>
+                <p class="emphasis">They reintroduced bees. They got an ecosystem.</p>
+                <p>One pollinator catalyzed cascading restoration.</p>
+                <p>Boredom returns → Creativity emerges<br>
+                Creativity emerges → Confidence builds<br>
+                Confidence builds → Life expands</p>
+                <p>You didn't meditate your way there.<br>
+                <span class="emphasis">You restored boredom. Everything else was a side effect.</span></p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Choose Your Reintroduction</h2>
+                <p class="interactive-prompt">Which pollinator do you reintroduce first?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Boredom → Creativity</div>
+                    <div class="option-card">Silence → Thought</div>
+                    <div class="option-card">Solitude → Self-knowledge</div>
+                    <div class="option-card">Waiting → Patience</div>
+                    <div class="option-card">Discomfort → Growth</div>
+                    <div class="option-card">Failure → Wisdom</div>
+                </div>
+                
+                <div class="protip" data-protip="4">
+                    <div class="protip-label">Pro Tip #5</div>
+                    <div class="protip-text">You don't choose to be creative. You choose to be bored. Creativity is the side effect.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Bite →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 6: THE RETURN -->
+        <section class="segment" id="segment5">
+            <header class="episode-header">
+                <div class="series-title">The Undertow • Episode</div>
+                <h1 class="episode-title">The Pollinator's Return</h1>
+                <p class="segment-subtitle">Segment 6: The Return</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="bloom-visual">
+                    <div class="flower-bloom">
+                        <div class="petal"></div>
+                        <div class="petal"></div>
+                        <div class="petal"></div>
+                        <div class="petal"></div>
+                        <div class="petal"></div>
+                        <div class="flower-center"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>The bee doesn't know it's saving the desert.</p>
+                <p>It's just seeking nectar.<br>
+                Following its design.<br>
+                Being what it is.</p>
+                <p class="emphasis">The restoration happens around it.</p>
+                <p>You are the bee.</p>
+                <p>Not because you meditate 13 minutes daily.<br>
+                But because you stopped fighting your design.</p>
+                <p>You returned to what feels like nectar.<br>
+                You restored the habitat.<br>
+                You let the pollinators back in.</p>
+                <p class="emphasis">The presence happens as a side effect.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Your Commitment</h2>
+                <p class="interactive-prompt">What's the first pollinator you'll welcome back?</p>
+                
+                <textarea class="text-input" placeholder="Just name it. Everything else is side effect."></textarea>
+                
+                <div class="protip" data-protip="5">
+                    <div class="protip-label">Pro Tip #6</div>
+                    <div class="protip-text">The bee doesn't try to save the desert. The desert saves itself when the bee is being a bee.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="showCompletion()">Complete Episode →</button>
+            </div>
+        </section>
+        
+        <!-- COMPLETION DASHBOARD -->
+        <section class="segment" id="completion">
+            <div class="completion-dashboard">
+                <h2 class="completion-title">The Pollinator Returned</h2>
+                <p class="completion-message">
+                    The desert blooms not because it tries,<br>
+                    but because the connections returned.
+                </p>
+                
+                <div class="badges-collected">
+                    <div class="badge">
+                        <div class="badge-icon">👁️</div>
+                        <div class="badge-name">The Observer</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🔬</div>
+                        <div class="badge-name">The Naturalist</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🏜️</div>
+                        <div class="badge-name">The Desert Walker</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🌱</div>
+                        <div class="badge-name">The Restorer</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🌊</div>
+                        <div class="badge-name">The Ecologist</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🐝</div>
+                        <div class="badge-name">The Pollinator</div>
+                    </div>
+                </div>
+                
+                <div class="narration" style="margin-top: 40px;">
+                    <p>The Nevada desert is still restoring. It's been five years.</p>
+                    <p>The bees are still returning. The purple is still spreading.</p>
+                    <p>It's not fast. It's not dramatic. It's not overnight transformation.</p>
+                    <p class="emphasis">It's pollination. One flower. One connection. One transfer of meaning.</p>
+                    <p>Until the desert blooms again.</p>
+                </div>
+                
+                <div style="margin-top: 60px;">
+                    <button class="nav-btn" onclick="restartEpisode()">Experience Again</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        let currentSegment = 0;
+        const totalSegments = 6;
+        
+        function showSegment(index) {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById(`segment${index}`).classList.add('active');
+            currentSegment = index;
+            window.scrollTo(0, 0);
+        }
+        
+        function nextSegment() {
+            if (currentSegment < totalSegments - 1) {
+                showSegment(currentSegment + 1);
+            }
+        }
+        
+        function prevSegment() {
+            if (currentSegment > 0) {
+                showSegment(currentSegment - 1);
+            }
+        }
+        
+        function showCompletion() {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById('completion').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function restartEpisode() {
+            showSegment(0);
+        }
+        
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        });
+        
+        // Interactive elements
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const currentSeg = document.querySelector('.segment.active');
+                const protip = currentSeg.querySelector('.protip');
+                if (protip && !protip.classList.contains('revealed')) {
+                    setTimeout(() => protip.classList.add('revealed'), 300);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.length > 10) {
+                    const currentSeg = document.querySelector('.segment.active');
+                    const protip = currentSeg.querySelector('.protip');
+                    if (protip && !protip.classList.contains('revealed')) {
+                        setTimeout(() => protip.classList.add('revealed'), 300);
+                    }
+                }
+            });
+        });
+        
+        // Segment 1 desert fading
+        let fadeTriggered = false;
+        window.addEventListener('scroll', () => {
+            if (currentSegment === 0) {
+                const field = document.getElementById('alfalfaField');
+                const bees = document.querySelectorAll('.bee-indicator');
+                const fieldPosition = field.getBoundingClientRect();
+                
+                if (!fadeTriggered && fieldPosition.top < window.innerHeight * 0.3) {
+                    fadeTriggered = true;
+                    bees.forEach((bee, idx) => {
+                        setTimeout(() => bee.classList.add('fade-out'), idx * 300);
+                    });
+                    setTimeout(() => field.classList.add('faded'), bees.length * 300 + 500);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies (if we ever add them)
+node_modules/
+bower_components/
+
+# Build files (if we ever add build process)
+dist/
+build/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
