@@ -16,6 +16,11 @@
             --cream: #f5f1e8;
             --dust: #b8a99a;
             --deep-sage: #5a6b52;
+            
+            /* Cultivated Heart colors */
+            --wild-green: #6b8e6b;
+            --rose-pink: #d4848f;
+            --thorn-brown: #8b7355;
         }
         
         * {
@@ -259,6 +264,319 @@
             to { opacity: 1; }
         }
         
+        /* Episodes Section - Two Panel */
+        .episodes {
+            padding: 120px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .episodes-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .series-badge {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .episodes-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--deep-sage);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .episodes-subtitle {
+            font-size: 1.2rem;
+            color: var(--dust);
+            font-style: italic;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .episode-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        
+        .episode-card.pollinator::before {
+            background: radial-gradient(circle at center, rgba(139, 123, 168, 0.1) 0%, transparent 70%);
+        }
+        
+        .episode-card.cultivated::before {
+            background: radial-gradient(circle at center, rgba(212, 132, 143, 0.1) 0%, transparent 70%);
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .episode-card:hover::before {
+            opacity: 1;
+        }
+        
+        .episode-card.pollinator:hover {
+            border-color: var(--purple);
+        }
+        
+        .episode-card.cultivated:hover {
+            border-color: var(--rose-pink);
+        }
+        
+        .episode-visual-small {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .episode-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--dust);
+            margin-bottom: 15px;
+        }
+        
+        .episode-card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .episode-card.pollinator .episode-card-title {
+            color: var(--deep-sage);
+        }
+        
+        .episode-card.cultivated .episode-card-title {
+            color: var(--thorn-brown);
+        }
+        
+        .episode-card-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #5a5250;
+            margin-bottom: 30px;
+        }
+        
+        .episode-card-meta {
+            font-size: 0.95rem;
+            color: var(--dust);
+            margin-bottom: 30px;
+        }
+        
+        .episode-card-cta {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--deep-sage) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 20px rgba(90, 107, 82, 0.3);
+        }
+        
+        .episode-card.cultivated .episode-card-cta {
+            background: linear-gradient(135deg, var(--wild-green) 0%, #5a7a5a 100%);
+            box-shadow: 0 6px 20px rgba(107, 142, 107, 0.3);
+        }
+        
+        .episode-card-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(90, 107, 82, 0.4);
+        }
+        
+        .episode-card.cultivated .episode-card-cta:hover {
+            box-shadow: 0 10px 30px rgba(107, 142, 107, 0.4);
+        }
+        
+        /* Small visuals for episode cards */
+        .bee-flower-small {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .flower-small {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+        
+        .petal-small {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--purple) 0%, #9a88b5 100%);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.75;
+        }
+        
+        .petal-small:nth-child(1) { transform: rotate(0deg) translateX(15px); }
+        .petal-small:nth-child(2) { transform: rotate(72deg) translateX(15px); }
+        .petal-small:nth-child(3) { transform: rotate(144deg) translateX(15px); }
+        .petal-small:nth-child(4) { transform: rotate(216deg) translateX(15px); }
+        .petal-small:nth-child(5) { transform: rotate(288deg) translateX(15px); }
+        
+        .flower-center-small {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: var(--honey);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(232, 181, 95, 0.4);
+        }
+        
+        .bee-small {
+            position: absolute;
+            font-size: 35px;
+            top: 10px;
+            right: 15px;
+            animation: beeFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 3px 10px rgba(232, 181, 95, 0.3));
+        }
+        
+        .two-roses-small {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .rose-wild-small {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+        
+        .rose-wild-petal-small {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--wild-green);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.8;
+        }
+        
+        .rose-wild-petal-small:nth-child(1) { transform: rotate(0deg) translateX(12px); }
+        .rose-wild-petal-small:nth-child(2) { transform: rotate(72deg) translateX(12px); }
+        .rose-wild-petal-small:nth-child(3) { transform: rotate(144deg) translateX(12px); }
+        .rose-wild-petal-small:nth-child(4) { transform: rotate(216deg) translateX(12px); }
+        .rose-wild-petal-small:nth-child(5) { transform: rotate(288deg) translateX(12px); }
+        
+        .rose-wild-center-small {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--honey);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .rose-cultivated-small {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+        
+        .rose-cultivated-petals-small {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: slowRotate 12s linear infinite;
+        }
+        
+        .rose-cult-petal-small {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: var(--rose-pink);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.7;
+        }
+        
+        .rose-cult-petal-small:nth-child(1) { transform: rotate(0deg) translateX(15px) scale(0.8); }
+        .rose-cult-petal-small:nth-child(2) { transform: rotate(30deg) translateX(15px) scale(0.9); }
+        .rose-cult-petal-small:nth-child(3) { transform: rotate(60deg) translateX(15px) scale(1); }
+        .rose-cult-petal-small:nth-child(4) { transform: rotate(90deg) translateX(15px) scale(0.9); }
+        .rose-cult-petal-small:nth-child(5) { transform: rotate(120deg) translateX(15px) scale(0.8); }
+        .rose-cult-petal-small:nth-child(6) { transform: rotate(150deg) translateX(15px) scale(1); }
+        .rose-cult-petal-small:nth-child(7) { transform: rotate(180deg) translateX(15px) scale(0.9); }
+        .rose-cult-petal-small:nth-child(8) { transform: rotate(210deg) translateX(15px) scale(0.8); }
+        .rose-cult-petal-small:nth-child(9) { transform: rotate(240deg) translateX(15px) scale(1); }
+        .rose-cult-petal-small:nth-child(10) { transform: rotate(270deg) translateX(15px) scale(0.9); }
+        .rose-cult-petal-small:nth-child(11) { transform: rotate(300deg) translateX(15px) scale(0.8); }
+        .rose-cult-petal-small:nth-child(12) { transform: rotate(330deg) translateX(15px) scale(1); }
+        
+        .rose-cultivated-center-small {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--thorn-brown);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+        }
+        
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
         /* About Section */
         .about {
             padding: 120px 40px;
@@ -486,6 +804,27 @@
             .about, .story, .details {
                 padding: 80px 20px;
             }
+            
+            .episodes {
+                padding: 80px 20px;
+            }
+            
+            .episodes-title {
+                font-size: 2.2rem;
+            }
+            
+            .episodes-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .episode-card {
+                padding: 40px 30px;
+            }
+            
+            .episode-card-title {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -504,10 +843,10 @@
                 <h1 class="hero-title">The Pollinator's Return</h1>
                 <p class="hero-tagline">When the bees came back, so did the desert.<br>What comes back when you do?</p>
                 <p class="hero-description">
-                    A 12-minute exploration of attention, presence, and natural design. Using the true story of Nevada's desert restoration, we examine what happens when you remove—and restore—the pollinators from human experience.
+                    A 12-minute exploration of attention, presence, and natural design. Using the true story of Nevada's desert restoration, we examine what happens when you removeâ€”and restoreâ€”the pollinators from human experience.
                 </p>
                 <a href="./episode.html" class="hero-cta">Begin the Journey</a>
-                <p class="hero-meta">12 minutes · 6 segments · Free, no signup</p>
+                <p class="hero-meta">12 minutes Â· 6 segments Â· Free, no signup</p>
             </div>
             
             <div class="hero-visual">
@@ -519,7 +858,84 @@
                     <div class="petal"></div>
                     <div class="flower-center"></div>
                 </div>
-                <div class="bee-hero">🐝</div>
+                <div class="bee-hero">ðŸ</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Episodes Section - Two Panel -->
+    <section class="episodes">
+        <div class="episodes-header">
+            <div class="series-badge">The Pollinator Series</div>
+            <h2 class="episodes-title">Two Episodes, One Pattern</h2>
+            <p class="episodes-subtitle">Pattern recognition, not prescription</p>
+        </div>
+        
+        <div class="episodes-grid">
+            <!-- Episode 1: The Pollinator's Return -->
+            <div class="episode-card pollinator">
+                <div class="episode-visual-small">
+                    <div class="bee-flower-small">
+                        <div class="flower-small">
+                            <div class="petal-small"></div>
+                            <div class="petal-small"></div>
+                            <div class="petal-small"></div>
+                            <div class="petal-small"></div>
+                            <div class="petal-small"></div>
+                            <div class="flower-center-small"></div>
+                        </div>
+                        <div class="bee-small">🐝</div>
+                    </div>
+                </div>
+                
+                <div class="episode-number">Episode One</div>
+                <h3 class="episode-card-title">The Pollinator's<br>Return</h3>
+                <p class="episode-card-description">
+                    When the bees came back, so did the desert. What comes back when you do?
+                </p>
+                <p class="episode-card-meta">12 minutes · 6 segments</p>
+                <a href="./episode.html" class="episode-card-cta">Experience Episode 1</a>
+            </div>
+            
+            <!-- Episode 2: The Cultivated Heart -->
+            <div class="episode-card cultivated">
+                <div class="episode-visual-small">
+                    <div class="two-roses-small">
+                        <div class="rose-wild-small">
+                            <div class="rose-wild-petal-small"></div>
+                            <div class="rose-wild-petal-small"></div>
+                            <div class="rose-wild-petal-small"></div>
+                            <div class="rose-wild-petal-small"></div>
+                            <div class="rose-wild-petal-small"></div>
+                            <div class="rose-wild-center-small"></div>
+                        </div>
+                        <div class="rose-cultivated-small">
+                            <div class="rose-cultivated-petals-small">
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                                <div class="rose-cult-petal-small"></div>
+                            </div>
+                            <div class="rose-cultivated-center-small"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="episode-number">Episode Two</div>
+                <h3 class="episode-card-title">The Cultivated<br>Heart</h3>
+                <p class="episode-card-description">
+                    The wild rose has five petals and survives alone. What did we breed out of you?
+                </p>
+                <p class="episode-card-meta">15 minutes · 6 segments</p>
+                <a href="./cultivated-heart.html" class="episode-card-cta">Experience Episode 2</a>
             </div>
         </div>
     </section>
@@ -552,21 +968,21 @@
             <h2 class="section-title">The Restoration</h2>
             <div class="story-grid">
                 <div class="story-card">
-                    <span class="story-icon">🌾</span>
+                    <span class="story-icon">ðŸŒ¾</span>
                     <div class="story-year">Year 1</div>
                     <p class="story-description">
                         Bees reintroduced. Some pollination. A few seed pods formed.
                     </p>
                 </div>
                 <div class="story-card">
-                    <span class="story-icon">🌸</span>
+                    <span class="story-icon">ðŸŒ¸</span>
                     <div class="story-year">Year 2</div>
                     <p class="story-description">
                         More bees arrived. More seeds. The cycle strengthened.
                     </p>
                 </div>
                 <div class="story-card">
-                    <span class="story-icon">🌺</span>
+                    <span class="story-icon">ðŸŒº</span>
                     <div class="story-year">Year 3</div>
                     <p class="story-description">
                         The purple started returning. The desert remembered how to bloom.
@@ -621,7 +1037,7 @@
             <a href="./about.html">About</a>
         </div>
         <p style="margin-top: 40px; color: var(--dust); font-size: 0.9rem;">
-            © 2025 Forteen Mind Labs. Like sushi, we're an acquired taste.
+            Â© 2025 Forteen Mind Labs. Like sushi, we're an acquired taste.
         </p>
     </footer>
 </body>
