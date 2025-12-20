@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Underground Network | The Pollinator Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Underground Network Palette */
+            --soil-brown: #3d2817;
+            --mycelium-white: #f0ede5;
+            --nutrient-gold: #d4a574;
+            --root-black: #1a1614;
+            --warning-red: #8b4034;
+            --growth-green: #5a6b52;
+            --network-glow: #e8b55f;
+            --decomp-gray: #8a7d75;
+            --earth-base: #4a3f35;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(180deg, var(--root-black) 0%, var(--soil-brown) 50%, var(--earth-base) 100%);
+            color: var(--mycelium-white);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        
+        /* Underground texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(232, 181, 95, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(90, 107, 82, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            z-index: 1;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--network-glow), var(--growth-green));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Segments */
+        .segment {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .segment.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header */
+        .episode-header {
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .series-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--network-glow);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .episode-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            color: var(--mycelium-white);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .segment-subtitle {
+            font-size: 1.1rem;
+            color: var(--decomp-gray);
+            font-style: italic;
+        }
+        
+        /* Visual containers */
+        .visual-container {
+            width: 100%;
+            height: 350px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            background: var(--root-black);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Segment 1: Mycelium spreading */
+        .mycelium-spread {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--soil-brown) 0%, var(--root-black) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .thread {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--mycelium-white), transparent);
+            opacity: 0;
+            animation: threadGrow 4s ease-in-out infinite;
+        }
+        
+        .thread:nth-child(1) { left: 20%; top: 30%; animation-delay: 0s; }
+        .thread:nth-child(2) { left: 45%; top: 20%; animation-delay: 0.5s; transform: rotate(45deg); }
+        .thread:nth-child(3) { left: 70%; top: 40%; animation-delay: 1s; transform: rotate(-30deg); }
+        .thread:nth-child(4) { left: 35%; top: 60%; animation-delay: 1.5s; transform: rotate(60deg); }
+        .thread:nth-child(5) { left: 60%; top: 70%; animation-delay: 2s; transform: rotate(-45deg); }
+        .thread:nth-child(6) { left: 85%; top: 50%; animation-delay: 2.5s; }
+        
+        @keyframes threadGrow {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.6; transform: scale(1); }
+        }
+        
+        .node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--network-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--network-glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .node:nth-child(7) { left: 20%; top: 30%; animation-delay: 0s; }
+        .node:nth-child(8) { left: 45%; top: 20%; animation-delay: 0.5s; }
+        .node:nth-child(9) { left: 70%; top: 40%; animation-delay: 1s; }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        /* Segment 2: Mother tree carbon flow */
+        .carbon-flow {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--root-black) 0%, var(--soil-brown) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .tree {
+            position: relative;
+            text-align: center;
+        }
+        
+        .tree-icon {
+            font-size: 60px;
+            filter: drop-shadow(0 5px 15px rgba(232, 181, 95, 0.3));
+        }
+        
+        .tree-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            color: var(--decomp-gray);
+            margin-top: 10px;
+        }
+        
+        .flow-arrow {
+            position: absolute;
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--network-glow), transparent);
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flowPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes flowPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Segment 3: Warning system */
+        .warning-network {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--warning-red) 0%, var(--root-black) 50%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .danger-pulse {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 3px solid var(--warning-red);
+            border-radius: 50%;
+            animation: dangerRipple 3s ease-out infinite;
+        }
+        
+        .danger-pulse:nth-child(1) { animation-delay: 0s; }
+        .danger-pulse:nth-child(2) { animation-delay: 1s; }
+        .danger-pulse:nth-child(3) { animation-delay: 2s; }
+        
+        @keyframes dangerRipple {
+            0% { opacity: 1; transform: scale(0.3); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+        
+        .beetle-icon {
+            font-size: 40px;
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Segment 4: Fake vs Real network */
+        .network-comparison {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background: var(--root-black);
+        }
+        
+        .network-side {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .network-left {
+            background: linear-gradient(135deg, rgba(139, 64, 52, 0.2), var(--root-black));
+        }
+        
+        .network-right {
+            background: linear-gradient(135deg, rgba(90, 107, 82, 0.2), var(--root-black));
+        }
+        
+        .network-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .network-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--mycelium-white);
+        }
+        
+        /* Segment 5: Decomposition */
+        .decomposition-visual {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, 
+                var(--root-black) 0%, 
+                var(--decomp-gray) 50%, 
+                var(--growth-green) 100%
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .fallen-tree {
+            font-size: 80px;
+            opacity: 0.4;
+            animation: decompose 5s ease-in-out infinite;
+        }
+        
+        @keyframes decompose {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(0.95); }
+        }
+        
+        .nutrient-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--network-glow);
+            border-radius: 50%;
+            animation: nutrientFlow 3s ease-in-out infinite;
+        }
+        
+        .nutrient-particle:nth-child(2) { left: 40%; top: 30%; animation-delay: 0s; }
+        .nutrient-particle:nth-child(3) { left: 50%; top: 50%; animation-delay: 0.5s; }
+        .nutrient-particle:nth-child(4) { left: 60%; top: 70%; animation-delay: 1s; }
+        
+        @keyframes nutrientFlow {
+            0% { opacity: 0; transform: translate(0, 0); }
+            50% { opacity: 1; transform: translate(30px, -20px); }
+            100% { opacity: 0; transform: translate(60px, -40px); }
+        }
+        
+        /* Segment 6: Planting connection */
+        .planting-visual {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--soil-brown) 0%, var(--root-black) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .seedling {
+            font-size: 100px;
+            animation: grow 4s ease-in-out infinite;
+        }
+        
+        @keyframes grow {
+            0%, 100% { transform: scale(0.8); opacity: 0.6; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+        
+        .root-thread {
+            position: absolute;
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, var(--mycelium-white));
+            bottom: 30%;
+            animation: rootExtend 3s ease-in-out infinite;
+        }
+        
+        .root-thread:nth-child(2) { left: 45%; animation-delay: 0s; }
+        .root-thread:nth-child(3) { left: 48%; animation-delay: 0.3s; transform: rotate(15deg); }
+        .root-thread:nth-child(4) { left: 52%; animation-delay: 0.6s; transform: rotate(-15deg); }
+        .root-thread:nth-child(5) { left: 55%; animation-delay: 0.9s; }
+        
+        @keyframes rootExtend {
+            0%, 100% { opacity: 0; transform: scaleY(0.5); }
+            50% { opacity: 0.6; transform: scaleY(1); }
+        }
+        
+        /* Narration */
+        .narration {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: var(--mycelium-white);
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .narration p {
+            margin-bottom: 1.5em;
+        }
+        
+        .emphasis {
+            font-style: italic;
+            color: var(--network-glow);
+            font-weight: 600;
+        }
+        
+        /* Interactive section */
+        .interactive-section {
+            background: rgba(26, 22, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin: 60px 0;
+            border: 1px solid rgba(232, 181, 95, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .interactive-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--network-glow);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .interactive-prompt {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--decomp-gray);
+            font-style: italic;
+            margin-bottom: 35px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option-card {
+            background: rgba(61, 40, 23, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--mycelium-white);
+        }
+        
+        .option-card:hover {
+            border-color: var(--growth-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(90, 107, 82, 0.3);
+            background: rgba(61, 40, 23, 0.8);
+        }
+        
+        .option-card.selected {
+            border-color: var(--network-glow);
+            background: rgba(232, 181, 95, 0.1);
+        }
+        
+        .option-card.selected::before {
+            content: '✓ ';
+            color: var(--network-glow);
+            font-weight: bold;
+        }
+        
+        /* Text input */
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(232, 181, 95, 0.2);
+            border-radius: 8px;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+            background: rgba(26, 22, 20, 0.5);
+            color: var(--mycelium-white);
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: var(--network-glow);
+            box-shadow: 0 0 0 3px rgba(232, 181, 95, 0.1);
+        }
+        
+        .text-input::placeholder {
+            color: var(--decomp-gray);
+        }
+        
+        /* Pro tip */
+        .protip {
+            background: linear-gradient(135deg, rgba(232, 181, 95, 0.1) 0%, rgba(90, 107, 82, 0.1) 100%);
+            border-left: 4px solid var(--network-glow);
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .protip.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .protip-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--network-glow);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .protip-text {
+            font-size: 1.1rem;
+            color: var(--mycelium-white);
+            font-style: italic;
+            line-height: 1.7;
+        }
+        
+        /* Navigation buttons */
+        .segment-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--growth-green) 0%, var(--network-glow) 100%);
+            color: var(--root-black);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(90, 107, 82, 0.3);
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(90, 107, 82, 0.4);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn.next {
+            margin-left: auto;
+        }
+        
+        /* Completion dashboard */
+        .completion-dashboard {
+            background: linear-gradient(135deg, rgba(90, 107, 82, 0.2), rgba(232, 181, 95, 0.2));
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .completion-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--network-glow);
+            margin-bottom: 20px;
+        }
+        
+        .completion-message {
+            font-size: 1.2rem;
+            color: var(--decomp-gray);
+            font-style: italic;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .badges-collected {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .badge {
+            background: rgba(61, 40, 23, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            min-width: 150px;
+            border: 1px solid rgba(232, 181, 95, 0.2);
+        }
+        
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .badge-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--mycelium-white);
+        }
+        
+        /* Privacy Notice */
+        .privacy-notice {
+            background: rgba(232, 181, 95, 0.1);
+            border: 1px solid rgba(232, 181, 95, 0.3);
+            border-radius: 8px;
+            padding: 20px 30px;
+            margin: 40px auto;
+            max-width: 700px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--decomp-gray);
+            line-height: 1.6;
+        }
+        
+        .privacy-notice strong {
+            color: var(--network-glow);
+            font-weight: 600;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+            
+            .episode-title {
+                font-size: 2.2rem;
+            }
+            
+            .narration {
+                font-size: 1.1rem;
+            }
+            
+            .visual-container {
+                height: 250px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .segment-navigation {
+                flex-direction: column;
+            }
+            
+            .nav-btn.next {
+                margin-left: 0;
+            }
+            
+            .network-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    
+    <div class="container">
+        <!-- SEGMENT 1: THE HIDDEN THREAD -->
+        <section class="segment active" id="segment0">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 1: The Hidden Thread</p>
+            </header>
+            
+            <div class="privacy-notice">
+                <strong>Privacy Note:</strong> This experience stores no data. Your reflections stay with you. We don't track, collect, or share anything. Pattern recognition, not surveillance.
+            </div>
+            
+            <div class="visual-container">
+                <div class="mycelium-spread">
+                    <div class="thread"></div>
+                    <div class="thread"></div>
+                    <div class="thread"></div>
+                    <div class="thread"></div>
+                    <div class="thread"></div>
+                    <div class="thread"></div>
+                    <div class="node"></div>
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>Beneath every forest, there is another forest.</p>
+                <p>Invisible. Ancient. Interconnected.</p>
+                <p>The trees you see? They're just the fruit.</p>
+                <p class="emphasis">The mycelium is the organism.</p>
+                <p>White threads spreading through darkness. Connecting root to root. Tree to tree.</p>
+                <p>This network has been here 400 million years longer than you.</p>
+                <p>And it's still teaching lessons we forgot how to hear.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The Infrastructure You Lost</h2>
+                <p class="interactive-prompt">What invisible infrastructure once held your life together?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Neighborhood rituals</div>
+                    <div class="option-card">Family dinners</div>
+                    <div class="option-card">Regular gatherings</div>
+                    <div class="option-card">Third places (cafes, parks)</div>
+                    <div class="option-card">Church/temple community</div>
+                    <div class="option-card">Walking routes with neighbors</div>
+                </div>
+                
+                <div class="protip" data-protip="0">
+                    <div class="protip-label">Underground Wisdom #1</div>
+                    <div class="protip-text">You can't see the mycelium, but without it, the forest dies. You can't see community infrastructure, but without it, you wither.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" disabled>← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Thread →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 2: THE MOTHER TREE -->
+        <section class="segment" id="segment1">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 2: The Mother Tree</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="carbon-flow">
+                    <div class="tree">
+                        <div class="tree-icon">🌳</div>
+                        <div class="tree-label">Mother Tree</div>
+                    </div>
+                    <div class="flow-arrow"></div>
+                    <div class="tree">
+                        <div class="tree-icon">🌱</div>
+                        <div class="tree-label">Sapling</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>The oldest trees in the forest don't hoard resources.</p>
+                <p>They share.</p>
+                <p>Through the mycelial network, they send carbon to saplings struggling in the shade.</p>
+                <p class="emphasis">The young trees literally feed on the wisdom of the elders.</p>
+                <p>This isn't charity. It's survival strategy.</p>
+                <p>When young trees thrive, the whole forest becomes more resilient.</p>
+                <p>The mother tree doesn't lecture the sapling on how to photosynthesize.</p>
+                <p class="emphasis">It just sends carbon. Real teaching is nutrient transfer, not information transfer.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Your Mother Tree</h2>
+                <p class="interactive-prompt">Who nurtured you through their network? Who gave without explanation?</p>
+                
+                <textarea class="text-input" placeholder="A mentor who shared time, not just advice. A grandparent who showed, not told. A neighbor who just appeared when you needed them..."></textarea>
+                
+                <div class="protip" data-protip="1">
+                    <div class="protip-label">Underground Wisdom #2</div>
+                    <div class="protip-text">The mother tree doesn't send instructions through the network. It sends carbon. Real nourishment happens underground, where nobody's watching.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Thread →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 3: THE WARNING SYSTEM -->
+        <section class="segment" id="segment2">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 3: The Warning System</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="warning-network">
+                    <div class="danger-pulse"></div>
+                    <div class="danger-pulse"></div>
+                    <div class="danger-pulse"></div>
+                    <div class="beetle-icon">🪲</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>When insects attack a tree, it doesn't suffer in silence.</p>
+                <p>It sends a chemical signal through the mycelial network.</p>
+                <p class="emphasis">"Danger. Beetles. Prepare defenses."</p>
+                <p>Within hours, every connected tree starts producing bitter compounds.</p>
+                <p>The beetles arrive to find the entire forest armed.</p>
+                <p>One tree's pain became everyone's protection.</p>
+                <p>We replaced warning systems with privacy.</p>
+                <p>"Don't burden others." "Handle it yourself." "Stay positive."</p>
+                <p class="emphasis">So we suffer alone. And when the beetles come for the next person, they're unprepared.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The Warning You Ignored</h2>
+                <p class="interactive-prompt">When did you last receive a real warning from your community?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Friend warning about red flags</div>
+                    <div class="option-card">Elder sharing hard-won lesson</div>
+                    <div class="option-card">Community alert about danger</div>
+                    <div class="option-card">Someone saying "I tried that..."</div>
+                    <div class="option-card">Neighbor's lived experience</div>
+                    <div class="option-card">The silence (no network left)</div>
+                </div>
+                
+                <div class="protip" data-protip="2">
+                    <div class="protip-label">Underground Wisdom #3</div>
+                    <div class="protip-text">The forest doesn't have vulnerability workshops. Trees just signal when they're under attack. That's the warning system. That's the network.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Thread →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 4: THE FAKE NETWORK -->
+        <section class="segment" id="segment3">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 4: The Fake Network</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="network-comparison">
+                    <div class="network-side network-left">
+                        <div class="network-icon">📱</div>
+                        <div class="network-label">Social Media</div>
+                    </div>
+                    <div class="network-side network-right">
+                        <div class="network-icon">🍄</div>
+                        <div class="network-label">Mycelium</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>We built our own network. We called it "social."</p>
+                <p>7 billion humans, connected by fiber optics.</p>
+                <p>It promised what mycelium delivers: Connection. Resource sharing. Community.</p>
+                <p class="emphasis">But look closer.</p>
+                <p><strong>Mycelium:</strong> Gives nutrients to struggling neighbors.<br>
+                <strong>Social media:</strong> Harvests attention from struggling users.</p>
+                <p><strong>Mycelium:</strong> Decentralized. No boss fungus.<br>
+                <strong>Social media:</strong> Algorithm decides what you see.</p>
+                <p><strong>Mycelium:</strong> Both organisms benefit (mutualism).<br>
+                <strong>Social media:</strong> Platform extracts, user depletes.</p>
+                <p class="emphasis">We didn't build a mycelial network. We built a parasite disguised as symbiosis.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The Extraction Test</h2>
+                <p class="interactive-prompt">What does your "network" actually give you?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Anxiety</div>
+                    <div class="option-card">Comparison</div>
+                    <div class="option-card">FOMO</div>
+                    <div class="option-card">Shallow validation</div>
+                    <div class="option-card">Time vanished</div>
+                    <div class="option-card">Real connection (really?)</div>
+                </div>
+                
+                <div class="protip" data-protip="3">
+                    <div class="protip-label">Underground Wisdom #4</div>
+                    <div class="protip-text">If cutting the connection makes you healthier, it wasn't mycelium. It was extraction.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Thread →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 5: THE DECOMPOSITION -->
+        <section class="segment" id="segment4">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 5: The Decomposition</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="decomposition-visual">
+                    <div class="fallen-tree">🌲</div>
+                    <div class="nutrient-particle"></div>
+                    <div class="nutrient-particle"></div>
+                    <div class="nutrient-particle"></div>
+                    <div class="nutrient-particle"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>When a tree dies, the mycelium doesn't mourn.</p>
+                <p>It gets to work.</p>
+                <p>Breaking down. Decomposing. Releasing nutrients.</p>
+                <p class="emphasis">The death becomes food for the living.</p>
+                <p>In 2 years, that fallen giant is feeding 20 young trees.</p>
+                <p>The forest doesn't see death as failure. It sees it as transfer.</p>
+                <p>We were taught failure is shameful. Hide it. Move on. Don't talk about it.</p>
+                <p>But what if failure is decomposition?</p>
+                <p class="emphasis">What if your collapse feeds someone else's growth?</p>
+                <p>What if sharing the breakdown is how the nutrient transfers?</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The Compost</h2>
+                <p class="interactive-prompt">What failure of yours could feed someone else if you shared it?</p>
+                
+                <textarea class="text-input" placeholder="The business that didn't work. The relationship that ended. The path that dead-ended. The dream that died..."></textarea>
+                
+                <div class="protip" data-protip="4">
+                    <div class="protip-label">Underground Wisdom #5</div>
+                    <div class="protip-text">The mycelium doesn't ask permission to decompose the dead tree. Nature doesn't have shame about breakdown. Only humans hoard their failures.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next Thread →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 6: THE RETURN TO MYCELIUM -->
+        <section class="segment" id="segment5">
+            <header class="episode-header">
+                <div class="series-title">The Pollinator Series • Episode 2</div>
+                <h1 class="episode-title">The Underground Network</h1>
+                <p class="segment-subtitle">Segment 6: The Return to Mycelium</p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="planting-visual">
+                    <div class="seedling">🌱</div>
+                    <div class="root-thread"></div>
+                    <div class="root-thread"></div>
+                    <div class="root-thread"></div>
+                    <div class="root-thread"></div>
+                    <div class="root-thread"></div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>You can't force mycelium to grow.</p>
+                <p>You can only create conditions where it might.</p>
+                <p>Plant trees close enough to connect. Don't poison the soil. Be patient.</p>
+                <p class="emphasis">The threads find each other.</p>
+                <p>Not through effort. Through proximity and time.</p>
+                <p>You don't "build community" through apps or events.</p>
+                <p>You create conditions:</p>
+                <p><strong>Show up regularly.</strong> (Proximity)<br>
+                <strong>Share resources.</strong> (Mutualism)<br>
+                <strong>Signal when you're struggling.</strong> (Warning system)<br>
+                <strong>Let your failures feed others.</strong> (Decomposition)<br>
+                <strong>Support the young.</strong> (Mother tree)<br>
+                <strong>Be patient.</strong> (400 million years patient)</p>
+                <p class="emphasis">The mycelium finds you. You don't download it.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Plant One Thread</h2>
+                <p class="interactive-prompt">What's one small thread you could plant this week?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Regular coffee with neighbor</div>
+                    <div class="option-card">Weekly call with elder</div>
+                    <div class="option-card">Share a hard lesson learned</div>
+                    <div class="option-card">Show up at local space repeatedly</div>
+                    <div class="option-card">Ask for help (first thread)</div>
+                    <div class="option-card">Give without keeping score</div>
+                </div>
+                
+                <div class="protip" data-protip="5">
+                    <div class="protip-label">Underground Wisdom #6</div>
+                    <div class="protip-text">The mycelium doesn't grow overnight. Neither does community. But once the threads connect, they last lifetimes.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="showCompletion()">Complete Network →</button>
+            </div>
+        </section>
+        
+        <!-- COMPLETION DASHBOARD -->
+        <section class="segment" id="completion">
+            <div class="completion-dashboard">
+                <h2 class="completion-title">The Network Reconnected</h2>
+                <p class="completion-message">
+                    The forest doesn't thrive because trees try harder.<br>
+                    It thrives because the threads never stopped connecting.
+                </p>
+                
+                <div class="badges-collected">
+                    <div class="badge">
+                        <div class="badge-icon">👁️</div>
+                        <div class="badge-name">The Observer</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🌳</div>
+                        <div class="badge-name">The Elder</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">📡</div>
+                        <div class="badge-name">The Signal</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🔍</div>
+                        <div class="badge-name">The Critic</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🍂</div>
+                        <div class="badge-name">The Composter</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🌱</div>
+                        <div class="badge-name">The Thread</div>
+                    </div>
+                </div>
+                
+                <div class="narration" style="margin-top: 40px;">
+                    <p>The largest living organism on Earth is a mycelial network.</p>
+                    <p>2,385 acres. 2,400 years old. Still growing.</p>
+                    <p>It doesn't post updates. It doesn't track engagement metrics.</p>
+                    <p class="emphasis">It just connects. Thread by thread. Root to root. Life to life.</p>
+                    <p>Until the forest remembers what it always was:</p>
+                    <p class="emphasis">One organism. Underground. Together.</p>
+                </div>
+                
+                <div class="privacy-notice" style="margin-top: 50px;">
+                    <strong>Your Journey, Your Data:</strong> Everything you typed or selected stays in your browser. We saw nothing. We stored nothing. This is between you and the mycelium.
+                </div>
+                
+                <div style="margin-top: 60px;">
+                    <button class="nav-btn" onclick="restartEpisode()">Experience Again</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        let currentSegment = 0;
+        const totalSegments = 6;
+        
+        function showSegment(index) {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById(`segment${index}`).classList.add('active');
+            currentSegment = index;
+            window.scrollTo(0, 0);
+        }
+        
+        function nextSegment() {
+            if (currentSegment < totalSegments - 1) {
+                showSegment(currentSegment + 1);
+            }
+        }
+        
+        function prevSegment() {
+            if (currentSegment > 0) {
+                showSegment(currentSegment - 1);
+            }
+        }
+        
+        function showCompletion() {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById('completion').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function restartEpisode() {
+            showSegment(0);
+        }
+        
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        });
+        
+        // Interactive elements
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const currentSeg = document.querySelector('.segment.active');
+                const protip = currentSeg.querySelector('.protip');
+                if (protip && !protip.classList.contains('revealed')) {
+                    setTimeout(() => protip.classList.add('revealed'), 300);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.length > 10) {
+                    const currentSeg = document.querySelector('.segment.active');
+                    const protip = currentSeg.querySelector('.protip');
+                    if (protip && !protip.classList.contains('revealed')) {
+                        setTimeout(() => protip.classList.add('revealed'), 300);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
