@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Art of Waiting | Episode 3 - The Undertow</title>
+    <meta name="description" content="17 years underground. A meditation on slow mastery, posthumous recognition, and the art of waiting.">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Episode 3: Cicada Palette */
+            --deep-soil: #3d2817;
+            --cicada-green: #a0c896;
+            --earth-red: #8b4513;
+            --shell-gold: #d4a574;
+            --museum-white: #f5f5f0;
+            --decay-gray: #6b6b6b;
+            --root-cream: #e8dcc8;
+            --soil-mid: #5c4033;
+            --emergence-light: #c5d9bc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--deep-soil) 0%, var(--soil-mid) 100%);
+            color: var(--root-cream);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        
+        /* Background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            z-index: 1;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(160, 200, 150, 0.1);
+            z-index: 100;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cicada-green), var(--shell-gold));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Segments */
+        .segment {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .segment.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header */
+        .episode-header {
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .hook-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: #f5f5f0;
+            margin-bottom: 25px;
+            font-weight: 400;
+            text-shadow: 0 0 30px rgba(240, 210, 145, 0.6),
+                         0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hook-separator {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--shell-gold), transparent);
+            margin: 0 auto 30px;
+            opacity: 0.6;
+        }
+        
+        .episode-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: #f5f5f0;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            text-shadow: 0 0 40px rgba(245, 245, 240, 0.3),
+                         0 0 80px rgba(212, 165, 116, 0.2);
+        }
+        
+        .episode-meta {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--emergence-light);
+            letter-spacing: 0.15em;
+            font-weight: 300;
+        }
+        
+        .episode-meta .separator {
+            margin: 0 12px;
+            opacity: 0.5;
+        }
+        
+        /* Visual containers */
+        .visual-container {
+            width: 100%;
+            height: 350px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Segment 1: Pure atmospheric underground - darkness with light */
+        .soil-layers {
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 600px 400px at 50% 48%, 
+                    rgba(61, 40, 23, 0.4) 0%,
+                    transparent 50%
+                ),
+                linear-gradient(to bottom,
+                    #1a1108 0%,
+                    #0f0905 100%
+                );
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Hide all structural elements - pure atmosphere */
+        .soil-texture {
+            display: none;
+        }
+        
+        .root-system {
+            display: none;
+        }
+        
+        .root {
+            display: none;
+        }
+        
+        /* The glowing nymph - hero of the scene */
+        .cicada-nymph {
+            position: absolute;
+            left: 50%;
+            top: 48%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 88px;
+            background: linear-gradient(155deg, 
+                #e8c18a 0%,
+                #d4a574 25%,
+                #c9a66b 50%,
+                #a67d45 100%
+            );
+            border-radius: 50% 50% 43% 43%;
+            box-shadow: 
+                0 0 80px rgba(232, 193, 138, 0.8),
+                0 0 140px rgba(212, 165, 116, 0.5),
+                0 0 200px rgba(212, 165, 116, 0.25),
+                inset -12px -15px 30px rgba(0, 0, 0, 0.5),
+                inset 8px 8px 20px rgba(255, 255, 255, 0.2);
+            animation: nymphBreathe 6s ease-in-out infinite;
+        }
+        
+        /* Large atmospheric glow chamber */
+        .cicada-nymph::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle,
+                rgba(232, 193, 138, 0.15) 0%,
+                rgba(212, 165, 116, 0.1) 30%,
+                rgba(212, 165, 116, 0.04) 50%,
+                transparent 70%
+            );
+            border-radius: 50%;
+            animation: chamberPulse 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes chamberPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(0.92); 
+                opacity: 0.4; 
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.08); 
+                opacity: 0.85; 
+            }
+        }
+        
+        /* Nymph body segments - subtle */
+        .cicada-nymph::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: rgba(70, 40, 15, 0.4);
+            box-shadow: 
+                0 11px 0 rgba(70, 40, 15, 0.35),
+                0 22px 0 rgba(70, 40, 15, 0.3),
+                0 33px 0 rgba(70, 40, 15, 0.25);
+        }
+        
+        @keyframes nymphBreathe {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+                filter: brightness(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.05); 
+                filter: brightness(1.1);
+            }
+        }
+        
+        .depth-markers {
+            display: none;
+        }
+        
+        .depth-marker {
+            display: none;
+        }
+        
+        .year-counter {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: #e8c18a;
+            font-weight: 600;
+            font-style: italic;
+            text-shadow: 
+                0 0 30px rgba(232, 193, 138, 0.7),
+                0 0 50px rgba(212, 165, 116, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.1em;
+        }
+        
+        /* Segment 2: Museum gallery */
+        .museum-gallery {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2a2520 0%, #1a1510 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .painting-frame {
+            width: 250px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--shell-gold) 0%, #b8935a 100%);
+            padding: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .painting-canvas {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #4a5f8a 0%, 
+                #7b8fa3 30%, 
+                #d4a574 60%,
+                #f0d291 100%
+            );
+            position: relative;
+        }
+        
+        .museum-spotlight {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(240, 210, 145, 0.2) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spotlightPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes spotlightPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .museum-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            color: var(--museum-white);
+            letter-spacing: 0.1em;
+        }
+        
+        /* Segment 3: Split screen (living vs dead) */
+        .split-screen {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+        }
+        
+        .split-left {
+            background: linear-gradient(135deg, var(--decay-gray) 0%, #4a4a4a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .split-right {
+            background: linear-gradient(135deg, var(--shell-gold) 0%, #f0d291 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .split-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        
+        .split-left .split-label {
+            color: var(--root-cream);
+        }
+        
+        .split-right .split-label {
+            color: var(--deep-soil);
+        }
+        
+        .split-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .split-text {
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .split-left .split-text {
+            color: var(--emergence-light);
+        }
+        
+        .split-right .split-text {
+            color: var(--soil-mid);
+        }
+        
+        /* Segment 4: Emergence sequence */
+        .emergence-sequence {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                var(--deep-soil) 0%,
+                var(--soil-mid) 50%,
+                var(--root-cream) 100%
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .emergence-cicada {
+            width: 80px;
+            height: 100px;
+            position: relative;
+            animation: emergenceRise 6s ease-in-out infinite;
+        }
+        
+        .cicada-body {
+            width: 100%;
+            height: 100%;
+            background: var(--cicada-green);
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 0 0 30px rgba(160, 200, 150, 0.5);
+            position: relative;
+        }
+        
+        .cicada-wings {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 60px;
+        }
+        
+        .wing {
+            position: absolute;
+            width: 60px;
+            height: 50px;
+            background: rgba(245, 245, 240, 0.3);
+            border-radius: 50% 30%;
+            border: 1px solid rgba(245, 245, 240, 0.5);
+            animation: wingUnfold 3s ease-in-out infinite;
+        }
+        
+        .wing-left {
+            left: 0;
+            transform-origin: right center;
+        }
+        
+        .wing-right {
+            right: 0;
+            transform-origin: left center;
+            transform: scaleX(-1);
+        }
+        
+        @keyframes emergenceRise {
+            0% { transform: translateY(100px); opacity: 0.3; }
+            50% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-20px); opacity: 0.8; }
+        }
+        
+        @keyframes wingUnfold {
+            0%, 40% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+        
+        /* Segment 5: Sound waves (chorus) */
+        .chorus-visual {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center,
+                var(--deep-soil) 0%,
+                var(--soil-mid) 40%,
+                var(--cicada-green) 100%
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sound-wave {
+            position: absolute;
+            border: 2px solid var(--cicada-green);
+            border-radius: 50%;
+            opacity: 0;
+            animation: soundPulse 4s ease-out infinite;
+        }
+        
+        .sound-wave:nth-child(1) { width: 100px; height: 100px; animation-delay: 0s; }
+        .sound-wave:nth-child(2) { width: 150px; height: 150px; animation-delay: 0.5s; }
+        .sound-wave:nth-child(3) { width: 200px; height: 200px; animation-delay: 1s; }
+        .sound-wave:nth-child(4) { width: 250px; height: 250px; animation-delay: 1.5s; }
+        .sound-wave:nth-child(5) { width: 300px; height: 300px; animation-delay: 2s; }
+        
+        @keyframes soundPulse {
+            0% { opacity: 0.8; transform: scale(0.3); }
+            100% { opacity: 0; transform: scale(1); }
+        }
+        
+        .chorus-text {
+            position: absolute;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--museum-white);
+            font-weight: 600;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        /* Segment 6: Cycle completion */
+        .cycle-visual {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+                var(--deep-soil) 0%,
+                var(--soil-mid) 20%,
+                var(--cicada-green) 40%,
+                var(--shell-gold) 70%,
+                var(--museum-white) 100%
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cycle-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 8rem;
+            font-weight: 700;
+            color: rgba(245, 245, 240, 0.9);
+            text-shadow: 0 0 60px rgba(212, 165, 116, 0.5);
+            animation: cycleGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes cycleGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 80px rgba(212, 165, 116, 0.8); }
+        }
+        
+        /* Narration */
+        .narration {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: var(--root-cream);
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .narration p {
+            margin-bottom: 1.5em;
+        }
+        
+        .emphasis {
+            font-style: italic;
+            color: var(--shell-gold);
+            font-weight: 600;
+        }
+        
+        /* Interactive section */
+        .interactive-section {
+            background: rgba(245, 245, 240, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin: 60px 0;
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .interactive-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--shell-gold);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .interactive-prompt {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--emergence-light);
+            font-style: italic;
+            margin-bottom: 35px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option-card {
+            background: rgba(245, 245, 240, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--root-cream);
+        }
+        
+        .option-card:hover {
+            border-color: var(--cicada-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(160, 200, 150, 0.15);
+            background: rgba(245, 245, 240, 0.12);
+        }
+        
+        .option-card.selected {
+            border-color: var(--shell-gold);
+            background: rgba(212, 165, 116, 0.15);
+        }
+        
+        .option-card.selected::before {
+            content: '✓ ';
+            color: var(--shell-gold);
+            font-weight: bold;
+        }
+        
+        /* Text input */
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 8px;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+            background: rgba(245, 245, 240, 0.05);
+            color: var(--root-cream);
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: var(--shell-gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        
+        .text-input::placeholder {
+            color: var(--emergence-light);
+            opacity: 0.5;
+        }
+        
+        /* Pro tip */
+        .protip {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(240, 210, 145, 0.15));
+            border-left: 4px solid var(--shell-gold);
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .protip.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .protip-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--shell-gold);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .protip-text {
+            font-size: 1.1rem;
+            color: var(--emergence-light);
+            font-style: italic;
+            line-height: 1.7;
+        }
+        
+        /* Navigation buttons */
+        .segment-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--cicada-green), #8ab284);
+            color: var(--deep-soil);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(160, 200, 150, 0.3);
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(160, 200, 150, 0.4);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn.next {
+            margin-left: auto;
+        }
+        
+        /* Completion dashboard */
+        .completion-dashboard {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(160, 200, 150, 0.1));
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .completion-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--shell-gold);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .completion-message {
+            font-size: 1.2rem;
+            color: var(--emergence-light);
+            font-style: italic;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .badges-collected {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .badge {
+            background: rgba(245, 245, 240, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            min-width: 150px;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+        }
+        
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .badge-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--shell-gold);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Footer */
+        footer {
+            padding: 80px 40px 40px;
+            text-align: center;
+            margin-top: 100px;
+            border-top: 1px solid rgba(212, 165, 116, 0.2);
+        }
+        
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--cicada-green);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .footer-tagline {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--emergence-light);
+            margin-bottom: 30px;
+        }
+        
+        .footer-links {
+            margin: 30px 0;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a {
+            color: var(--shell-gold);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--cicada-green);
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--emergence-light);
+            opacity: 0.8;
+        }
+        
+        .privacy-notice {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--emergence-light);
+            opacity: 0.6;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+            
+            .episode-title {
+                font-size: 2.2rem;
+            }
+            
+            .hook-line {
+                font-size: 0.95rem;
+                letter-spacing: 0.3em;
+            }
+            
+            .narration {
+                font-size: 1.1rem;
+            }
+            
+            .visual-container {
+                height: 250px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .segment-navigation {
+                flex-direction: column;
+            }
+            
+            .nav-btn.next {
+                margin-left: 0;
+            }
+            
+            footer {
+                padding: 60px 20px 30px;
+            }
+            
+            .split-screen {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            
+            .cycle-number {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    
+    <div class="container">
+        <!-- SEGMENT 1: UNDERGROUND -->
+        <section class="segment active" id="segment0">
+            <header class="episode-header">
+                <div class="hook-line">17 Years Underground</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 1
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="soil-layers">
+                    <div class="soil-texture"></div>
+                    <div class="root-system">
+                        <div class="root"></div>
+                        <div class="root"></div>
+                        <div class="root"></div>
+                        <div class="root"></div>
+                        <div class="root"></div>
+                    </div>
+                    <div class="cicada-nymph"></div>
+                    <div class="depth-markers">
+                        <div class="depth-marker surface">Surface</div>
+                        <div class="depth-marker one-foot">1 ft</div>
+                        <div class="depth-marker two-foot">2 ft</div>
+                    </div>
+                    <div class="year-counter">Year 14</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>In the soil beneath your feet, something is waiting.</p>
+                <p>It's been there for 7 years. Then 10. Then 15.</p>
+                <p>Not sleeping. Not hibernating. <span class="emphasis">Working.</span></p>
+                <p>The cicada nymph feeds on tree roots. Grows through five molts. Tunnels slowly upward. Tracks time by counting leaf cycles in the xylem sap above.</p>
+                <p>Seventeen springs. Seventeen winters. Seventeen seasons of invisible preparation.</p>
+                <p>Nobody sees it. Nobody knows it's there.</p>
+                <p>The world above moves fast. Annual cicadas emerge every year. Quick cycles. Constant visibility.</p>
+                <p class="emphasis">The 17-year cicada stays underground.</p>
+                <p>Feeding. Growing. Waiting for 64 degrees.</p>
+                <p>Not because it's slow. Because some things require 17 years underground.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">What's Underground</h2>
+                <p class="interactive-prompt">What have you been doing that nobody sees?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Research with no publications yet</div>
+                    <div class="option-card">Craft with no sales yet</div>
+                    <div class="option-card">Practice with no performance yet</div>
+                    <div class="option-card">Learning with no credentials yet</div>
+                    <div class="option-card">Building with no launch yet</div>
+                    <div class="option-card">Writing with no readers yet</div>
+                </div>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #1</div>
+                    <div class="protip-text">Underground doesn't mean inactive. The cicada feeds for 17 years. You call that "stuck." The cicada calls that "preparation."</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" disabled>← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 2: THE POSTHUMOUS PATTERN -->
+        <section class="segment" id="segment1">
+            <header class="episode-header">
+                <div class="hook-line">When They Finally See It</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 2
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="museum-gallery">
+                    <div class="museum-spotlight"></div>
+                    <div class="painting-frame">
+                        <div class="painting-canvas"></div>
+                    </div>
+                    <div class="museum-label">Van Gogh • 1889 • Sold 2021: $85M</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>Vincent van Gogh sold one painting while alive. <span class="emphasis">One.</span></p>
+                <p>Died at 37. Unknown. Dismissed. A failure by every visible metric.</p>
+                <p>Today: $85 million for "The Red Vineyard." Museums fight for his work. His name synonymous with genius.</p>
+                <p>Johannes Vermeer: 34 paintings. Forgotten for 200 years. Now priceless.</p>
+                <p>Emily Dickinson: 1,800 poems. Published 10 in her lifetime. All anonymously.</p>
+                <p>We built museums to honor them. <span class="emphasis">After they died.</span></p>
+                <p>We write books about their genius. <span class="emphasis">After they died.</span></p>
+                <p>We tell students to aspire to their level. <span class="emphasis">After they died.</span></p>
+                <p class="emphasis">While they were alive? Crickets.</p>
+                <p>Society has a pattern: Ignore the 17-year cicada. Celebrate it posthumously.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">The Posthumous Pattern</h2>
+                <p class="interactive-prompt">Who do we worship now that we ignored when alive?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Van Gogh (1 painting sold alive)</div>
+                    <div class="option-card">Kafka (published against his will)</div>
+                    <div class="option-card">Dickinson (10 poems, all anonymous)</div>
+                    <div class="option-card">Vermeer (forgotten 200 years)</div>
+                    <div class="option-card">Modigliani (died in poverty)</div>
+                    <div class="option-card">Melville (Moby Dick flopped)</div>
+                </div>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #2</div>
+                    <div class="protip-text">We build museums for the dead. We build skepticism for the living. The 17-year cicada emerges to an audience. The 16-year cicada works in silence.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 3: THE LIVING PENALTY -->
+        <section class="segment" id="segment2">
+            <header class="episode-header">
+                <div class="hook-line">While You're Still Alive</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 3
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="split-screen">
+                    <div class="split-left">
+                        <div class="split-label">Living</div>
+                        <div class="split-icon">💀</div>
+                        <div class="split-text">
+                            "When will you launch?"<br>
+                            "Still working on that?"<br>
+                            "Maybe try something faster?"<br>
+                            "Are you sure this will work?"
+                        </div>
+                    </div>
+                    <div class="split-right">
+                        <div class="split-label">Dead</div>
+                        <div class="split-icon">🏛️</div>
+                        <div class="split-text">
+                            "Visionary."<br>
+                            "Ahead of their time."<br>
+                            "Uncompromising artist."<br>
+                            "True dedication."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>While van Gogh painted: "Maybe try something more commercial?"</p>
+                <p>After van Gogh died: "Uncompromising vision! True artist!"</p>
+                <p>While Dickinson wrote: "Why don't you publish under your name?"</p>
+                <p>After Dickinson died: "Revolutionary poet! Singular voice!"</p>
+                <p>While Melville wrote Moby Dick: "Boring. Too long. Nobody will read this."</p>
+                <p>After Melville died: "Greatest American novel! Required reading!"</p>
+                <p class="emphasis">There's a penalty for being alive while working on something that takes time.</p>
+                <p>The culture punishes slow mastery in the living. Celebrates it in the dead.</p>
+                <p>You're in Year 14 underground. The world asks: "Still digging?"</p>
+                <p>The cicada doesn't respond. It feeds. It grows. It waits for Year 17.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">What They Say</h2>
+                <p class="interactive-prompt">What do people say about your 17-year work?</p>
+                
+                <textarea class="text-input" placeholder="'When will it be done?' 'Still working on that?' 'Maybe try something faster?'..."></textarea>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #3</div>
+                    <div class="protip-text">The living pay the penalty of invisibility. The dead receive the reward of recognition. The cicada doesn't care. Year 16 looks exactly like Year 14. Both underground.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 4: THE EMERGENCE -->
+        <section class="segment" id="segment3">
+            <header class="episode-header">
+                <div class="hook-line">64 Degrees</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 4
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="emergence-sequence">
+                    <div class="emergence-cicada">
+                        <div class="cicada-body">
+                            <div class="cicada-wings">
+                                <div class="wing wing-left"></div>
+                                <div class="wing wing-right"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>Year 17. Soil temperature hits 64°F. Eight inches below ground.</p>
+                <p>The signal. Not before. Not after. <span class="emphasis">Exactly 64 degrees.</span></p>
+                <p>The cicada tunnels upward. Breaks surface at dusk. Climbs the nearest tree.</p>
+                <p>The exoskeleton splits. The adult emerges. Wings unfold. Green and fresh.</p>
+                <p>By morning: hardened. Ready. <span class="emphasis">Seventeen years for this moment.</span></p>
+                <p>Not 16 years. Not 18 years. Seventeen.</p>
+                <p>Prime number. No predators sync to it. Perfect evolutionary timing.</p>
+                <p>Van Gogh painted 900 paintings before he died. Monet painted 2,500. Picasso: 50,000.</p>
+                <p class="emphasis">The work underground determines the emergence above.</p>
+                <p>You don't skip Year 14 to get to Year 17. You live Year 14. Then Year 15. Then Year 16.</p>
+                <p>The cicada knows: There's no shortcut to 64 degrees.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Your 64 Degrees</h2>
+                <p class="interactive-prompt">What's the condition you're waiting for?</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">Skill level reached</div>
+                    <div class="option-card">Research completed</div>
+                    <div class="option-card">Prototype perfected</div>
+                    <div class="option-card">Vision crystallized</div>
+                    <div class="option-card">Timing aligned</div>
+                    <div class="option-card">I'll know when it's ready</div>
+                </div>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #4</div>
+                    <div class="protip-text">The cicada waits for 64 degrees. Not 63. Not 65. The temperature is the signal. Your "64 degrees" isn't a deadline. It's a condition.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 5: THE CHORUS -->
+        <section class="segment" id="segment4">
+            <header class="episode-header">
+                <div class="hook-line">1.5 Million Per Acre</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 5
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="chorus-visual">
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                    <div class="chorus-text">100 dB</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>They emerge together. Not one. Not a few. <span class="emphasis">1.5 million per acre.</span></p>
+                <p>The males sing. All at once. 100 decibels. Louder than a lawnmower. Louder than a chainsaw.</p>
+                <p>The chorus lasts six weeks. They mate. Lay eggs. Die.</p>
+                <p>The eggs hatch. The nymphs drop to the ground. Burrow down.</p>
+                <p><span class="emphasis">Begin another 17 years.</span></p>
+                <p>One cicada emerging alone? Invisible. Easy prey. Pointless.</p>
+                <p>1.5 million cicadas? Undeniable. Overwhelming. Impossible to ignore.</p>
+                <p>Van Gogh painted alone. Died alone. But his work joined a chorus: Impressionists. Post-impressionists. Modernists.</p>
+                <p>Dickinson wrote alone. But her poems joined a chorus: American poetry. Feminist literature. Confessional writing.</p>
+                <p class="emphasis">You're not emerging alone. You're part of a 17-year cycle.</p>
+                <p>Others are underground too. Year 12. Year 15. Year 16.</p>
+                <p>When you emerge, you won't be the only one. You'll be part of the chorus.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Who Else Is Underground?</h2>
+                <p class="interactive-prompt">Who's working on something nobody sees yet?</p>
+                
+                <textarea class="text-input" placeholder="Name them. The researchers, the writers, the builders, the artists in Year 14, Year 15, Year 16..."></textarea>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #5</div>
+                    <div class="protip-text">The cicada doesn't emerge alone. Neither do you. You're not the only one underground. You're just the only one you can see.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSegment()">Next →</button>
+            </div>
+        </section>
+        
+        <!-- SEGMENT 6: THE 17-YEAR CYCLE -->
+        <section class="segment" id="segment5">
+            <header class="episode-header">
+                <div class="hook-line">The Art of Waiting</div>
+                <div class="hook-separator"></div>
+                <h1 class="episode-title">The Art of Waiting</h1>
+                <p class="episode-meta">
+                    Episode 3 <span class="separator">•</span> The Undertow <span class="separator">•</span> Segment 6
+                </p>
+            </header>
+            
+            <div class="visual-container">
+                <div class="cycle-visual">
+                    <div class="cycle-number">17</div>
+                </div>
+            </div>
+            
+            <div class="narration">
+                <p>The cicada doesn't apologize for taking 17 years.</p>
+                <p>It doesn't rush to Year 12 and try to emerge early. It doesn't explain why it's still underground in Year 15.</p>
+                <p><span class="emphasis">It simply waits. Feeds. Grows. Until 64 degrees.</span></p>
+                <p>Then it emerges. Joins the chorus. Completes the cycle.</p>
+                <p>Van Gogh didn't apologize for taking years to develop his style. He painted 900 paintings. Sold one. Kept painting.</p>
+                <p>Dickinson didn't apologize for writing 1,800 poems nobody read. She kept writing.</p>
+                <p>Vermeer didn't apologize for painting slowly. 34 paintings. Each one: years.</p>
+                <p class="emphasis">The art of waiting isn't passive. It's active preparation.</p>
+                <p>You're in Year 14. Feed. Grow. Track the cycles. Wait for your 64 degrees.</p>
+                <p>The world will ask: "When will you emerge?"</p>
+                <p>You answer: <span class="emphasis">"Year 17."</span></p>
+                <p>Not because you're slow. Because some things are worth 17 years underground.</p>
+            </div>
+            
+            <div class="interactive-section">
+                <h2 class="interactive-title">Your Commitment</h2>
+                <p class="interactive-prompt">What are you willing to wait 17 years for?</p>
+                
+                <textarea class="text-input" placeholder="Name it. The mastery, the work, the vision that's worth the underground years..."></textarea>
+                
+                <div class="protip">
+                    <div class="protip-label">Pro Tip #6</div>
+                    <div class="protip-text">The cicada doesn't count days. It counts cycles. You're not behind. You're in the cycle. Year 14 is exactly where Year 14 should be.</div>
+                </div>
+            </div>
+            
+            <div class="segment-navigation">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn next" onclick="showCompletion()">Complete Episode →</button>
+            </div>
+        </section>
+        
+        <!-- COMPLETION DASHBOARD -->
+        <section class="segment" id="completion">
+            <div class="completion-dashboard">
+                <h2 class="completion-title">The Cycle Continues</h2>
+                <p class="completion-message">
+                    The cicada doesn't emerge to applause.<br>
+                    It emerges because it's Year 17.<br>
+                    That's the art of waiting.
+                </p>
+                
+                <div class="badges-collected">
+                    <div class="badge">
+                        <div class="badge-icon">🌱</div>
+                        <div class="badge-name">The Underground</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🏛️</div>
+                        <div class="badge-name">The Pattern</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">💀</div>
+                        <div class="badge-name">The Penalty</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🌡️</div>
+                        <div class="badge-name">The Signal</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">📢</div>
+                        <div class="badge-name">The Chorus</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">⏳</div>
+                        <div class="badge-name">The Cycle</div>
+                    </div>
+                </div>
+                
+                <div class="narration" style="margin-top: 40px;">
+                    <p>Somewhere underground, another nymph is in Year 1.</p>
+                    <p>Somewhere else, Year 8. Year 12. Year 16.</p>
+                    <p>Each one: feeding, growing, waiting.</p>
+                    <p class="emphasis">Not behind. Not ahead. In the cycle.</p>
+                    <p>Year 17 comes for everyone. Not on your timeline. On the cycle's timeline.</p>
+                    <p>The cicada teaches: <span class="emphasis">Some things are worth 17 years underground.</span></p>
+                </div>
+                
+                <div style="margin-top: 60px;">
+                    <button class="nav-btn" onclick="restartEpisode()">Experience Again</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-brand">Forteen Mind Labs</div>
+        <p class="footer-tagline">Pattern recognition, not prescription.</p>
+        <div class="footer-links">
+            <a href="https://forteen.in">forteen.in</a>
+            <a href="/cdn-cgi/l/email-protection#f6919f849f859eb690998482939398d89f98"><span class="__cf_email__" data-cfemail="bbdcd2c9d2c8d3fbddd4c9cfdeded595d2d5">[email&#160;protected]</span></a>
+        </div>
+        <p class="copyright">
+            © 2025 Forteen Mind Labs
+        </p>
+        <p class="privacy-notice">
+            No tracking. No data collection. Your reflections stay with you.
+        </p>
+    </footer>
+    
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        let currentSegment = 0;
+        const totalSegments = 6;
+        
+        function showSegment(index) {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById(`segment${index}`).classList.add('active');
+            currentSegment = index;
+            window.scrollTo(0, 0);
+            updateProgress();
+        }
+        
+        function nextSegment() {
+            if (currentSegment < totalSegments - 1) {
+                showSegment(currentSegment + 1);
+            }
+        }
+        
+        function prevSegment() {
+            if (currentSegment > 0) {
+                showSegment(currentSegment - 1);
+            }
+        }
+        
+        function showCompletion() {
+            document.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+            document.getElementById('completion').classList.add('active');
+            window.scrollTo(0, 0);
+            updateProgress();
+        }
+        
+        function restartEpisode() {
+            showSegment(0);
+        }
+        
+        function updateProgress() {
+            const progress = ((currentSegment + 1) / totalSegments) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        // Progress bar on scroll
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const scrollProgress = (scrolled / documentHeight) * 100;
+            
+            // Combine segment progress with scroll progress
+            const segmentProgress = (currentSegment / totalSegments) * 100;
+            const segmentScrollProgress = (scrollProgress / totalSegments);
+            const totalProgress = segmentProgress + segmentScrollProgress;
+            
+            document.getElementById('progressFill').style.width = totalProgress + '%';
+        });
+        
+        // Interactive elements
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const currentSeg = document.querySelector('.segment.active');
+                const protip = currentSeg.querySelector('.protip');
+                if (protip && !protip.classList.contains('revealed')) {
+                    setTimeout(() => protip.classList.add('revealed'), 300);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.length > 10) {
+                    const currentSeg = document.querySelector('.segment.active');
+                    const protip = currentSeg.querySelector('.protip');
+               
