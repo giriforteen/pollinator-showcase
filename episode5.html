@@ -1413,21 +1413,34 @@
             document.getElementById('progressFill').style.width = totalProgress + '%';
         });
         
-        // Interactive elements
-        document.querySelectorAll('.option-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                const currentSeg = document.querySelector('.segment.active');
-                const protip = currentSeg.querySelector('.protip');
-                if (protip && !protip.classList.contains('revealed')) {
-                    setTimeout(() => protip.classList.add('revealed'), 300);
-                }
+        // Interactive elements - wait for DOM to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const currentSeg = document.querySelector('.segment.active');
+                    const protip = currentSeg.querySelector('.protip');
+                    if (protip && !protip.classList.contains('revealed')) {
+                        setTimeout(() => protip.classList.add('revealed'), 300);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.text-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.length > 10) {
+                        const currentSeg = document.querySelector('.segment.active');
+                        const protip = currentSeg.querySelector('.protip');
+                        if (protip && !protip.classList.contains('revealed')) {
+                            setTimeout(() => protip.classList.add('revealed'), 300);
+                        }
+                    }
+                });
             });
         });
         
-        document.querySelectorAll('.text-input').forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.length > 10) {
-                    const currentSeg = document.querySelector('.segment.active');
-                    const protip = currentSeg.querySelector('.protip');
-               
+        // Initialize first segment
+        showSegment(0);
+    </script>
+</body>
+</html>
