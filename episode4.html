@@ -863,7 +863,7 @@
                 You tell yourself you're looking for connection. What you're actually looking for is <em>familiarity</em>.
             </p>
             <p class="cinema-narration emphasis">
-                And familiarity isn't love. It's muscle memory.
+                And familiarity isn't love. It's safety.
             </p>
 
             <div class="interactive-section">
@@ -995,6 +995,7 @@
 
             <div class="interactive-section">
                 <h3 class="interactive-question">What's your signal?</h3>
+                <p class="question-subtext" style="font-size: 0.95rem; font-style: italic; color: var(--dust); margin-bottom: 20px; line-height: 1.6;">What unlocks a primary, instinctive response from you—something that happens before you know it? That facilitates this pattern and keeps you signing up for tickets?</p>
                 <div class="options-container" id="options-segment-5">
                     <!-- Populated by JavaScript -->
                 </div>
@@ -1275,6 +1276,43 @@
 
             <div class="segment-nav">
                 <button class="nav-btn" onclick="prevSegment()">← Previous</button>
+                <button class="nav-btn" onclick="nextSegment()">Continue →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEGMENT 10: First Steps -->
+    <div class="segment cinema-mode" id="segment-10">
+        <div class="cinema-container">
+            <h2 class="segment-title">First Steps</h2>
+
+            <p class="cinema-narration">
+                Understanding the pattern is the first step. But understanding alone doesn't rewrite the code.
+            </p>
+            <p class="cinema-narration">
+                The brain needs practice. Small actions. Repeated until new pathways form.
+            </p>
+            <p class="cinema-narration emphasis">
+                Not force. Not willpower. Just gentle, persistent redirection.
+            </p>
+            <div class="cinema-break"></div>
+            <p class="cinema-narration">
+                Here's where you might begin:
+            </p>
+
+            <div class="interactive-section">
+                <h3 class="interactive-question">Which first step feels right for you?</h3>
+                <div class="options-container" id="options-segment-10">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="protip" id="protip-10">
+                    <div class="protip-label">Pro Tip Unlocked</div>
+                    <p class="protip-text">You don't need to fix everything at once. You just need to do one thing differently. Then another. Then another. New pathways form through repetition, not revelation.</p>
+                </div>
+            </div>
+
+            <div class="segment-nav">
+                <button class="nav-btn" onclick="prevSegment()">← Previous</button>
                 <button class="nav-btn" onclick="completeEpisode()">Complete Episode →</button>
             </div>
         </div>
@@ -1337,6 +1375,10 @@
                     <div class="badge-emoji">🚪</div>
                     <div class="badge-name">THE EDITOR</div>
                 </div>
+                <div class="badge-card">
+                    <div class="badge-emoji">👣</div>
+                    <div class="badge-name">THE PATHFINDER</div>
+                </div>
             </div>
 
             <p class="final-message" style="margin-top: 60px; font-size: 1.5rem; color: var(--cinema-gold);">
@@ -1377,30 +1419,28 @@
             2: [
                 "The emotional dynamic (intensity, distance, push-pull)",
                 "The physical location (same neighborhood, same type of place)",
-                "The role you play (rescuer, caretaker, the responsible one)",
-                "The feeling (chaos that feels like home)",
-                "The familiar absence (what was always missing)"
+                "The role you play—the familiar emotions it brings (the calm of peacemaker, the chaos of troublemaker, the indignity of being misunderstood)",
+                "The lure of the 'fresh start' (abandoning when it gets difficult instead of staying, learning, growing)",
+                "Just a little bit more (waiting for the 'perfect' situation that never comes, constant procrastination)"
             ],
             3: [
-                "The Unavailable One (emotionally distant, physically present)",
+                "The Unavailable One (emotionally distant, almost commits, almost loves you, keeps you guessing)",
                 "The Rescue Mission (they're broken, you're the fixer)",
-                "The Intensity Junkie (fast, fierce, consuming)",
-                "The Slow Fade (starts strong, dies slow)",
-                "The 'Almost' Story (almost commits, almost loves you)"
+                "The Intensity Cycle (fast and fierce, then slow fade—passion turns to exhaustion)",
+                "The Waiting Room (always 'soon,' always 'maybe,' never 'now')"
             ],
             4: [
                 "The boss who's never satisfied",
                 "The job that promises growth but keeps you small",
-                "The role where you're undervalued and overworked",
-                "The workplace where you're the fixer/rescuer",
-                "The environment where you succeed then self-sabotage"
+                "The workplace where I feel seen and valued... until I'm questioned and fall short",
+                "The role where I'm the fixer/rescuer, always overworked, rarely valued"
             ],
             5: [
-                "A specific person from childhood",
-                "A temperature (emotional climate)",
-                "A level of chaos or calm",
-                "A feeling of being needed",
-                "A pattern of inconsistency"
+                "A person who makes me feel like I felt as a child—scared, helpless, judged",
+                "A feeling of doubt or worry that triggers abandonment patterns",
+                "The pull of being needed, the guilt of not helping",
+                "The chaos of a volatile situation (unpredictability that feels familiar)",
+                "An emotional temperature that matches my childhood climate"
             ],
             6: [
                 "You give, they take (unbalanced ledger)",
@@ -1411,9 +1451,11 @@
             ],
             8: [
                 "The place where I felt safest",
-                "The person who loved me inconsistently",
+                "The person whose love I had to keep earning",
+                "The person whose love felt like a test or moving goalpost",
+                "The person who kept me guessing where I stood with them",
                 "The role I played in my family",
-                "The feeling I got from achievement",
+                "The identity I got from achieving (being 'the A+ person,' the high achiever)",
                 "The chaos that felt like home"
             ],
             9: [
@@ -1422,12 +1464,18 @@
                 "The friendship rerun",
                 "The self-sabotage rerun",
                 "All of the above (start with one)"
+            ],
+            10: [
+                "Get feedback to understand my blind spots",
+                "Identify different, more helpful roles I could play that would get me where I want to be",
+                "Enlist trusted people (friends, family, mentors) to help me see my patterns",
+                "Find people I admire and ask: 'What would they do differently than me in this situation?'"
             ]
         };
 
         // Current segment
         let currentSegment = 0;
-        const totalSegments = 10; // 0-9 plus completion
+        const totalSegments = 11; // 0-10 plus completion
 
         // Shuffle array function
         function shuffleArray(array) {
@@ -1538,12 +1586,14 @@
         }
 
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            updateProgressBar();
-            // Initialize options for segment 1 (it might be visible on some browsers)
-            initializeSegmentOptions(1);
-        });
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                showSegment(0);
+            });
+        } else {
+            // DOM already loaded
+            showSegment(0);
+        }
     </script>
-
 </body>
 </html>
