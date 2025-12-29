@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven - THE UNDERTOW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --deep-indigo: #1a1d2e;
+            --slate: #2a3142;
+            --muted-teal: #4a6b6b;
+            --bio-glow: #5eb3b3;
+            --text-primary: #e8e9ed;
+            --text-secondary: #a8b2c1;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0d0f1a 0%, var(--deep-indigo) 50%, #131826 100%);
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        header {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+
+        .platform-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--bio-glow);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .page-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            margin-top: 2rem;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        .content p {
+            margin-bottom: 1.8rem;
+        }
+
+        .emphasis {
+            font-style: italic;
+            color: var(--bio-glow);
+            text-align: center;
+            padding: 2rem 0;
+            font-size: 1.4rem;
+        }
+
+        .octopus-visual {
+            margin: 4rem 0;
+            text-align: center;
+        }
+
+        .octopus-container {
+            display: inline-block;
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .tentacle {
+            position: absolute;
+            width: 3px;
+            background: linear-gradient(180deg, var(--bio-glow) 0%, transparent 100%);
+            transform-origin: top center;
+            opacity: 0.5;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tentacle:nth-child(1) { height: 100px; left: 50%; transform: rotate(-60deg); animation-delay: 0s; }
+        .tentacle:nth-child(2) { height: 95px; left: 54%; transform: rotate(-40deg); animation-delay: 0.2s; }
+        .tentacle:nth-child(3) { height: 98px; left: 58%; transform: rotate(-20deg); animation-delay: 0.4s; }
+        .tentacle:nth-child(4) { height: 105px; left: 62%; transform: rotate(0deg); animation-delay: 0.6s; }
+        .tentacle:nth-child(5) { height: 100px; left: 66%; transform: rotate(20deg); animation-delay: 0.8s; }
+        .tentacle:nth-child(6) { height: 96px; left: 70%; transform: rotate(40deg); animation-delay: 1s; }
+        .tentacle:nth-child(7) { height: 102px; left: 74%; transform: rotate(60deg); animation-delay: 1.2s; }
+
+        .interactive-prompt {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(42, 49, 66, 0.2);
+            border-left: 2px solid var(--muted-teal);
+        }
+
+        .interactive-prompt h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--bio-glow);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--muted-teal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .option:hover {
+            background: rgba(74, 107, 107, 0.2);
+            border-color: var(--bio-glow);
+        }
+
+        .option.selected {
+            background: rgba(94, 179, 179, 0.15);
+            border-color: var(--bio-glow);
+        }
+
+        .insight-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(94, 179, 179, 0.1);
+            border-left: 3px solid var(--bio-glow);
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .insight-box.show {
+            opacity: 1;
+            max-height: 500px;
+            margin-top: 2rem;
+        }
+
+        .insight-box::before {
+            content: "→ ";
+            color: var(--bio-glow);
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4rem 0 2rem;
+        }
+
+        button {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 1rem 2rem;
+            border: 1px solid var(--muted-teal);
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--muted-teal);
+            border-color: var(--bio-glow);
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        button.primary {
+            background: var(--muted-teal);
+        }
+
+        button.primary:hover {
+            background: var(--bio-glow);
+            color: var(--deep-indigo);
+        }
+
+        .reflection-input {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(42, 49, 66, 0.3);
+            border: 1px solid var(--muted-teal);
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            resize: vertical;
+            outline: none;
+        }
+
+        .reflection-input:focus {
+            border-color: var(--bio-glow);
+        }
+
+        .reflection-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .email-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(42, 49, 66, 0.2);
+            border: 1px solid var(--muted-teal);
+            text-align: center;
+        }
+
+        .email-section p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .email-link {
+            color: var(--bio-glow);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .email-link:hover {
+            border-bottom-color: var(--bio-glow);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            border-top: 1px solid rgba(168, 178, 193, 0.1);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+
+        .copyright {
+            margin-top: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .saved-message {
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--bio-glow);
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin: 1rem 0;
+        }
+
+        .saved-message.show {
+            opacity: 1;
+            max-height: 200px;
+            margin: 2rem 0;
+        }
+
+        .saved-message p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .saved-message button {
+            margin-top: 1rem;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: rotate(var(--rotate)) translateY(0);
+            }
+            50% {
+                transform: rotate(var(--rotate)) translateY(-8px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .interactive-prompt {
+                padding: 1.5rem;
+            }
+
+            .option {
+                padding: 0.8rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    
+    <!-- PAGE 1: Introduction -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <header>
+                <div class="platform-name">THE UNDERTOW</div>
+                <h1>Seven</h1>
+                <div class="subtitle">A pattern observation</div>
+            </header>
+
+            <div class="octopus-visual">
+                <div class="octopus-container">
+                    <div class="tentacle" style="--rotate: -60deg;"></div>
+                    <div class="tentacle" style="--rotate: -40deg;"></div>
+                    <div class="tentacle" style="--rotate: -20deg;"></div>
+                    <div class="tentacle" style="--rotate: 0deg;"></div>
+                    <div class="tentacle" style="--rotate: 20deg;"></div>
+                    <div class="tentacle" style="--rotate: 40deg;"></div>
+                    <div class="tentacle" style="--rotate: 60deg;"></div>
+                </div>
+            </div>
+
+            <div class="content">
+                <p>There's an octopus in the Vancouver Aquarium. Let's call her Seven.</p>
+
+                <p>Seven changes her entire appearance in less than a second. Not just color—texture, pattern, shape. She becomes rock, coral, sand. Whatever she needs to be to survive the moment.</p>
+
+                <p>The marine biologist who studies her notices something: Seven doesn't just camouflage when predators approach. She does it constantly. Even alone. Even when there's no threat.</p>
+
+                <p>Like she's forgotten what she actually looks like underneath.</p>
+
+                <div class="interactive-prompt">
+                    <h3>Pause for a moment</h3>
+                    <p>Have you ever known someone who seems to become whoever the room needs them to be?</p>
+                    <div class="option" data-value="yes" data-insight="The biologist noticed this too. What looks like adaptability at first can actually be survival mode running overtime. The person shifting might not even realize they're doing it anymore.">Yes, I've seen this</div>
+                    <div class="option" data-value="maybe" data-insight="Sometimes the pattern is so smooth we miss it entirely. Try this: Watch someone across three different social settings. Do they shift fundamentally, or just adjust naturally? There's a difference.">Maybe, I'm not sure</div>
+                    <div class="option" data-value="no" data-insight="That's worth noting. Not everyone camouflages this way. Some people stay remarkably consistent across contexts. When you do see dramatic shifting, it stands out.">No, not really</div>
+                    <div class="insight-box" id="insight1"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <div class="page-number">1 / 4</div>
+                <button class="primary" onclick="goToPage(2)">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: The Pattern -->
+    <div id="page2" class="page">
+        <div class="container">
+            <div class="content">
+                <p>When they introduced another octopus to the adjacent tank, Seven pressed against the glass for hours. Every tentacle spread flat.</p>
+
+                <p>When they removed the other octopus three days later, Seven stopped eating. Just sat in the corner, arms curled tight.</p>
+
+                <p class="emphasis">Octopuses in distress sometimes detach their own limbs. Not because something's attacking them. Because the pain of being themselves becomes unbearable.</p>
+
+                <p>Seven started doing it on Tuesday.</p>
+
+                <p>The biologist wondered: How do you tell if a creature with no bones feels hollow?</p>
+
+                <p>You watch the patterns.</p>
+
+                <div class="interactive-prompt">
+                    <h3>Pattern recognition</h3>
+                    <p>In the past month, have you noticed someone displaying any of these?</p>
+                    <div class="option" data-pattern="1" data-insight="This is one of the clearest patterns. The intensity of the attachment often mirrors the severity of the withdrawal. It's not about the other person changing—it's about the internal stability shifting.">Intense attachment followed by sudden withdrawal</div>
+                    <div class="option" data-pattern="2" data-insight="Seven does this with her camouflage. The question isn't whether someone adapts to social contexts—we all do. The question is: can they still access who they are when alone?">Changing personality based on who's in the room</div>
+                    <div class="option" data-pattern="3" data-insight="The gap between the surface and what's happening internally can be vast. People who seem most composed sometimes have the most turbulent inner experience. They've just gotten very good at the performance.">Calm on the surface, but cycling through emotions rapidly when alone</div>
+                    <div class="option" data-pattern="4" data-insight="The biologist saw this with Seven—new rocks, different feeding times, anything. When your internal world feels unstable, external changes feel threatening. Small disruptions become existential.">Reacting strongly to small changes or disruptions</div>
+                    <div class="option" data-pattern="none" data-insight="That's valuable data too. Not seeing these patterns doesn't mean they're not there—but it might mean your environment is relatively stable. Keep observing.">None of these seem familiar</div>
+                    <div class="insight-box" id="insight2"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button onclick="goToPage(1)">Back</button>
+                <div class="page-number">2 / 4</div>
+                <button class="primary" onclick="goToPage(3)">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: The Wondering -->
+    <div id="page3" class="page">
+        <div class="container">
+            <div class="content">
+                <p>The biologist started keeping notes. Not solutions. Just patterns.</p>
+
+                <p>She noticed: Seven seemed both calmer and more agitated when she could see her reflection. Like she was searching for something she recognized.</p>
+
+                <p>The camouflaging intensified after any change—new rocks, different feeding schedule, a visitor tapping the glass. Any disruption. Seven would cycle through every pattern faster and faster, trying to find the right one to make the world stable again.</p>
+
+                <p>The biologist wondered: Do the other creatures notice? Do they see Seven disappearing and reappearing and think that's just... what octopuses do?</p>
+
+                <p>How many times does someone have to shift before they forget what they looked like to begin with?</p>
+
+                <div class="interactive-prompt">
+                    <h3>Gentle reflection</h3>
+                    <p>If you were to observe the people around you for one week—really watch—what patterns might you notice that you've been calling "normal"?</p>
+                    <div class="option" data-reflection="1" data-insight="Pro tip: Notice who disappears from conversations when disagreement emerges. Constant adaptation to please often means someone learned early that their authentic self wasn't safe to show.">Someone constantly adapting to please others</div>
+                    <div class="option" data-reflection="2" data-insight="When emotional responses seem disproportionate, there's usually a pattern underneath. What looks like overreaction is often the tip of a much larger iceberg. The reaction isn't about the surface event.">Emotional reactions that seem out of proportion</div>
+                    <div class="option" data-reflection="3" data-insight="The biologist wondered if Seven felt empty. Emptiness isn't always obvious—sometimes it looks like constant busyness, chronic boredom, or the inability to be alone. Watch for what people use to fill the space.">A persistent sense of emptiness they try to fill</div>
+                    <div class="option" data-reflection="4" data-insight="Seven pressed against the glass when another octopus appeared. Watch for the intensity behind 'casual' check-ins, the panic beneath 'just wondering where you are.' Fear of abandonment often masquerades as care.">Fear of being alone or abandoned</div>
+                    <div class="option" data-reflection="observe" data-insight="This might be the wisest response. Observation without conclusion is rare. Spend the week just noticing, without naming or fixing. See what patterns emerge when you're not looking for them.">I want to observe before answering</div>
+                    <div class="insight-box" id="insight3"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button onclick="goToPage(2)">Back</button>
+                <div class="page-number">3 / 4</div>
+                <button class="primary" onclick="goToPage(4)">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: Your Notebook -->
+    <div id="page4" class="page">
+        <div class="container">
+            <div class="content">
+                <p>The file is still open. The biologist is still watching.</p>
+
+                <p>She keeps a notebook by the glass. Page one says:</p>
+
+                <p class="emphasis">"What patterns am I not noticing because they look normal?"</p>
+
+                <p>The rest is blank. She's waiting to see what she writes.</p>
+
+                <div class="interactive-prompt">
+                    <h3>Your observation space</h3>
+                    <p>What did you notice while reading Seven's story? This stays private.</p>
+                    
+                    <textarea 
+                        class="reflection-input" 
+                        id="userObservation"
+                        placeholder="Your observations..."
+                    ></textarea>
+                    
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button onclick="skipObservation()" style="margin-right: 0.5rem;">Skip</button>
+                        <button class="primary" onclick="saveObservation()">Note This</button>
+                    </div>
+                    
+                    <div class="saved-message" id="savedMsg">
+                        <p>Observation saved to your browser.</p>
+                        <button class="primary" onclick="downloadObservation()">Download as .txt</button>
+                    </div>
+                </div>
+
+                <div class="email-section">
+                    <p>If this observation resonated with you, we'd like to hear from you.</p>
+                    <a href="mailto:girish@forteen.in" class="email-link">girish@forteen.in</a>
+                </div>
+            </div>
+
+            <footer>
+                <p>THE UNDERTOW</p>
+                <p style="font-style: italic; text-transform: none;">Observations, not solutions</p>
+                
+                <div style="margin: 2rem 0; padding: 1.5rem; background: rgba(42, 49, 66, 0.2); border: 1px solid rgba(168, 178, 193, 0.1); font-size: 0.85rem; line-height: 1.6;">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.1em;">PRIVACY NOTE</p>
+                    <p style="color: var(--text-secondary); font-family: 'Crimson Pro', serif; font-size: 0.9rem; text-transform: none; letter-spacing: normal;">Your observations are stored locally in your browser only. Nothing is sent to our servers. When you download your notes, the file is created on your device. We have no access to what you write.</p>
+                </div>
+                
+                <p class="copyright">© 2025 Forteen Consulting. All rights reserved.</p>
+            </footer>
+
+            <div class="nav-buttons" style="border-top: 1px solid rgba(168, 178, 193, 0.1); margin-top: 2rem; padding-top: 2rem;">
+                <button onclick="goToPage(3)">Back</button>
+                <div class="page-number">4 / 4</div>
+                <button class="primary" onclick="goToPage(1)">Start Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation
+        let currentPage = 1;
+
+        function goToPage(pageNum) {
+            document.getElementById(`page${currentPage}`).classList.remove('active');
+            currentPage = pageNum;
+            document.getElementById(`page${currentPage}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Interactive options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Toggle selection within the same prompt
+                const siblings = this.parentElement.querySelectorAll('.option');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Show insight
+                const insight = this.getAttribute('data-insight');
+                const insightBox = this.parentElement.querySelector('.insight-box');
+                
+                if (insight && insightBox) {
+                    insightBox.textContent = insight;
+                    insightBox.classList.remove('show');
+                    // Small delay for smooth transition
+                    setTimeout(() => {
+                        insightBox.classList.add('show');
+                    }, 100);
+                }
+                
+                // Store response
+                const promptType = this.dataset.value || this.dataset.pattern || this.dataset.reflection;
+                if (promptType) {
+                    localStorage.setItem(`seven_response_${promptType}`, 'true');
+                }
+            });
+        });
+
+        // Save observation
+        function saveObservation() {
+            const observation = document.getElementById('userObservation').value.trim();
+            if (observation) {
+                const timestamp = new Date().toISOString();
+                localStorage.setItem('seven_observation', JSON.stringify({
+                    text: observation,
+                    timestamp: timestamp
+                }));
+                
+                document.getElementById('savedMsg').classList.add('show');
+                document.getElementById('userObservation').disabled = true;
+            } else {
+                alert('Please write something before saving.');
+            }
+        }
+
+        function skipObservation() {
+            const savedMsg = document.getElementById('savedMsg');
+            savedMsg.innerHTML = '<p>Noted. You can always return to observe later.</p>';
+            savedMsg.classList.add('show');
+            setTimeout(() => {
+                savedMsg.classList.remove('show');
+            }, 3000);
+        }
+
+        function downloadObservation() {
+            const saved = localStorage.getItem('seven_observation');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const date = new Date(data.timestamp);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const content = `SEVEN - Pattern Observation
+THE UNDERTOW
+
+Date: ${formattedDate}
+
+WHAT I NOTICED:
+
+${data.text}
+
+---
+
+This observation is part of THE UNDERTOW series.
+Observations, not solutions.
+
+© 2025 Forteen Consulting
+For more: girish@forteen.in`;
+
+                // Create blob and download
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `seven-observation-${date.getTime()}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                // Show confirmation
+                const savedMsg = document.getElementById('savedMsg');
+                const originalHTML = savedMsg.innerHTML;
+                savedMsg.innerHTML = '<p>Download started. Check your downloads folder.</p>';
+                setTimeout(() => {
+                    savedMsg.innerHTML = originalHTML;
+                }, 3000);
+            }
+        }
+
+        // Load previous observation if exists
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('seven_observation');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('userObservation').value = data.text;
+                document.getElementById('savedMsg').classList.add('show');
+                document.getElementById('userObservation').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
