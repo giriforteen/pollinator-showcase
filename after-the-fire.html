@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTER THE FIRE | NATURE & DESIGN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-bg: #A7AA63;
+            --green-dark: #7a8556;
+            --green-light: #c4c899;
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --font-serif: 'Crimson Text', serif;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-brand: 'Sora', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-serif);
+            background: var(--green-bg);
+            color: var(--black);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        .progress-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--green-dark); z-index: 1000;
+        }
+        .progress-fill {
+            height: 100%; background: var(--white); width: 0%;
+            transition: width 0.5s ease; border-radius: 0 4px 4px 0;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 40px; }
+        .episode-header { text-align: center; margin-bottom: 100px; animation: fadeIn 1.5s ease; }
+        .brand {
+            font-family: var(--font-brand); font-size: 0.75rem;
+            letter-spacing: 0.3em; color: var(--black);
+            text-transform: uppercase; margin-bottom: 10px; opacity: 0.7;
+        }
+        .series-title {
+            font-family: var(--font-brand); font-size: 0.85rem;
+            letter-spacing: 0.25em; color: var(--white);
+            text-transform: uppercase; margin-bottom: 40px; font-weight: 600;
+        }
+        .episode-title {
+            font-family: var(--font-display); font-size: 4.5rem; font-weight: 300;
+            color: var(--white); margin-bottom: 20px; letter-spacing: 0.02em;
+        }
+        .episode-subtitle {
+            font-family: var(--font-serif); font-size: 1.2rem;
+            color: var(--black); font-style: italic;
+            max-width: 650px; margin: 0 auto; line-height: 1.8;
+        }
+        .segment { display: none; animation: fadeIn 1s ease; min-height: 60vh; }
+        .segment.active { display: block; }
+        .segment-header { text-align: center; margin-bottom: 50px; }
+        .segment-number {
+            font-family: var(--font-display); font-size: 0.75rem;
+            letter-spacing: 0.3em; color: var(--black);
+            text-transform: uppercase; margin-bottom: 12px; opacity: 0.7;
+        }
+        .segment-title {
+            font-family: var(--font-display); font-size: 3rem; font-weight: 300;
+            color: var(--white); margin-bottom: 25px;
+        }
+        .narration {
+            font-size: 1.15rem; line-height: 2; color: var(--black);
+            max-width: 700px; margin: 0 auto 50px; text-align: center;
+        }
+        
+        /* SHIBUMI: Organic visual containers */
+        .visual-container {
+            width: 100%; max-width: 700px; min-height: 380px;
+            margin: 50px auto; border-radius: 50px; position: relative;
+            overflow: hidden; background: var(--white);
+            border: 3px solid var(--black);
+        }
+        
+        /* Ecosystem Web */
+        .ecosystem-web {
+            position: relative; width: 100%; height: 100%; min-height: 380px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+        }
+        .web-node {
+            position: absolute; width: 75px; height: 75px; border-radius: 50%;
+            background: var(--white); border: 2px solid var(--black);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; text-align: center; padding: 8px;
+            transition: all 0.5s ease; cursor: pointer; color: var(--black);
+            font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .web-node.burned {
+            background: var(--black); border-color: var(--black);
+            color: var(--white); box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+        .web-line {
+            position: absolute; height: 2px; background: var(--black);
+            transform-origin: left center; transition: all 0.5s ease;
+        }
+        .web-line.burned { opacity: 0.2; }
+        .web-center {
+            width: 100px; height: 100px; background: var(--black);
+            color: var(--white); font-weight: 600; z-index: 10;
+            border: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        
+        /* Silence Visual */
+        .silence-visual {
+            background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; min-height: 380px; padding: 60px 40px;
+        }
+        .sound-wave { width: 85%; height: 50px; margin: 20px 0; position: relative; }
+        .wave-line {
+            position: absolute; width: 100%; height: 1px; background: var(--black);
+            top: 50%; transform: translateY(-50%); opacity: 0.2;
+        }
+        .silence-text {
+            font-family: var(--font-display); font-size: 2rem; color: var(--black);
+            margin-top: 30px; text-align: center; font-weight: 300; opacity: 0.6;
+        }
+        
+        /* Pioneer Landscape */
+        .pioneer-landscape {
+            background: linear-gradient(to bottom, #f5f5f5 0%, #ffffff 50%, #e8e8e8 100%);
+            position: relative; cursor: pointer; min-height: 380px;
+            display: flex; align-items: flex-end;
+        }
+        .ground-line {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            height: 2px; background: var(--black); opacity: 0.3;
+        }
+        .pioneer-plant {
+            position: absolute; width: 10px; height: 0;
+            background: var(--green-dark); border-radius: 5px 5px 0 0;
+            bottom: 0; opacity: 0; transition: all 0.3s ease;
+        }
+        .pioneer-plant.sprouting { animation: sprout 0.8s ease forwards; }
+        @keyframes sprout {
+            0% { height: 0; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { height: 30px; opacity: 1; }
+        }
+        .click-prompt {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: var(--font-display); font-size: 1.3rem; color: var(--black);
+            text-align: center; pointer-events: none; opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Succession Chart */
+        .succession-chart {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            display: flex; align-items: center; justify-content: space-around;
+            padding: 60px 40px; min-height: 380px;
+        }
+        .succession-stage {
+            text-align: center; flex: 1; padding: 20px;
+            transition: all 0.3s ease; cursor: pointer; border-radius: 30px;
+        }
+        .succession-stage:hover {
+            background: rgba(0,0,0,0.05); transform: translateY(-5px);
+        }
+        .stage-icon { font-size: 3.5rem; margin-bottom: 15px; }
+        .stage-label {
+            font-family: var(--font-display); font-size: 1.1rem;
+            color: var(--black); margin-bottom: 8px; font-weight: 600;
+        }
+        .stage-desc { font-size: 0.85rem; color: var(--black); opacity: 0.6; }
+        
+        /* Keystone Visual */
+        .keystone-visual {
+            background: linear-gradient(to bottom, #fafafa 0%, #f0f0f0 100%);
+            position: relative; display: flex; align-items: center;
+            justify-content: center; min-height: 380px; padding: 40px;
+        }
+        .cascade-item {
+            position: absolute; padding: 12px 20px; background: var(--black);
+            color: var(--white); border-radius: 30px; font-size: 0.85rem;
+            opacity: 0; font-weight: 600; animation: cascadeFade 0.5s ease forwards;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        @keyframes cascadeFade { to { opacity: 1; } }
+        
+        /* New Forest */
+        .new-forest {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-bg) 100%);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 380px; padding: 60px 40px; position: relative;
+        }
+        .forest-element {
+            font-size: 4rem; margin: 0 20px; opacity: 0;
+            animation: grow 1s ease forwards;
+        }
+        .forest-element:nth-child(1) { animation-delay: 0.2s; }
+        .forest-element:nth-child(2) { animation-delay: 0.4s; }
+        .forest-element:nth-child(3) { animation-delay: 0.6s; }
+        .forest-element:nth-child(4) { animation-delay: 0.8s; }
+        @keyframes grow {
+            from { transform: scale(0) rotate(-15deg); opacity: 0; }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        /* SHIBUMI: Organic interactive boxes */
+        .interactive-box {
+            background: rgba(255, 255, 255, 0.15); border: 2px solid var(--black);
+            border-radius: 40px; padding: 40px; margin: 50px auto; max-width: 650px;
+        }
+        .interactive-title {
+            font-family: var(--font-display); font-size: 1.5rem;
+            color: var(--white); margin-bottom: 20px;
+            text-align: center; font-weight: 400;
+        }
+        .choice-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px; margin-top: 20px;
+        }
+        
+        /* SHIBUMI: Pill-shaped buttons */
+        .choice-btn {
+            padding: 18px 20px; background: var(--white); color: var(--black);
+            border: 2px solid var(--black); border-radius: 30px;
+            cursor: pointer; font-family: var(--font-serif); font-size: 0.95rem;
+            transition: all 0.3s ease; text-align: center; font-weight: 600;
+        }
+        .choice-btn:hover {
+            background: var(--black); color: var(--white);
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .choice-btn.selected { background: var(--black); color: var(--white); }
+        
+        /* SHIBUMI: Organic response boxes */
+        .response-text {
+            margin-top: 20px; padding: 18px; background: rgba(0, 0, 0, 0.3);
+            color: var(--white); display: none; line-height: 1.7;
+            font-style: italic; border-radius: 25px;
+        }
+        .response-text.show { display: block; animation: fadeIn 0.5s ease; }
+        
+        /* SHIBUMI: Organic pro tip boxes */
+        .pro-tip {
+            background: var(--black); padding: 28px 35px; margin: 50px auto;
+            max-width: 700px; border-radius: 30px; opacity: 0;
+            animation: slideIn 0.8s ease forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .pro-tip-label {
+            font-family: var(--font-brand); font-size: 0.7rem;
+            letter-spacing: 0.25em; color: var(--green-light);
+            text-transform: uppercase; margin-bottom: 10px; font-weight: 600;
+        }
+        .pro-tip-text { font-size: 1.05rem; color: var(--white); line-height: 1.7; }
+        
+        /* Navigation */
+        .nav-container {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 80px; padding-top: 50px; border-top: 2px solid rgba(0, 0, 0, 0.3);
+        }
+        
+        /* SHIBUMI: Pill-shaped nav buttons */
+        .nav-btn {
+            padding: 18px 40px; background: var(--black); color: var(--white);
+            border: none; border-radius: 50px; cursor: pointer;
+            font-family: var(--font-serif); font-size: 1.05rem;
+            transition: all 0.3s ease; font-weight: 600;
+        }
+        .nav-btn:hover { background: var(--white); color: var(--black); }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: var(--black); color: var(--white); }
+        .segment-indicator {
+            font-family: var(--font-display); font-size: 1rem;
+            color: var(--black); font-weight: 600;
+        }
+        
+        /* Completion */
+        .completion-screen {
+            display: none; text-align: center; padding: 100px 40px;
+            background: var(--green-bg);
+        }
+        .completion-screen.active { display: block; animation: fadeIn 1s ease; }
+        .completion-icon { font-size: 7rem; margin-bottom: 40px; }
+        .completion-title {
+            font-family: var(--font-display); font-size: 3.5rem;
+            color: var(--white); margin-bottom: 25px; font-weight: 300;
+        }
+        .completion-message {
+            font-size: 1.25rem; color: var(--black); max-width: 650px;
+            margin: 0 auto 50px; line-height: 2;
+        }
+        .badge-collection {
+            display: flex; justify-content: center; gap: 25px;
+            margin: 50px 0; flex-wrap: wrap;
+        }
+        .badge {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: var(--white); border: 3px solid var(--black);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+        }
+        
+        /* SHIBUMI: Organic restart button */
+        .restart-btn {
+            padding: 20px 50px; background: var(--black); color: var(--white);
+            border: none; border-radius: 50px; cursor: pointer;
+            font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600;
+            transition: all 0.3s ease; margin-top: 30px;
+        }
+        .restart-btn:hover { background: var(--white); color: var(--black); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { padding: 50px 25px; }
+            .episode-title { font-size: 3rem; }
+            .segment-title { font-size: 2.3rem; }
+            .narration { font-size: 1.1rem; }
+            .visual-container { min-height: 280px; border-radius: 40px; }
+            .web-node { width: 60px; height: 60px; font-size: 0.65rem; }
+            .web-center { width: 80px; height: 80px; }
+            .succession-chart { flex-direction: column; padding: 40px 20px; }
+            .forest-element { font-size: 2.8rem; margin: 0 10px; }
+            .choice-grid { grid-template-columns: 1fr; }
+            .interactive-box { padding: 30px 20px; border-radius: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="container">
+        <div class="episode-header">
+            <div class="brand">FORTEEN MIND LABS</div>
+            <div class="series-title">NATURE & DESIGN</div>
+            <h1 class="episode-title">AFTER THE FIRE</h1>
+            <p class="episode-subtitle">A pattern about restoration. And remembering that new forest isn't wrong forest.</p>
+        </div>
+        
+        <!-- Segment 1: The Fire -->
+        <div class="segment active" id="segment1">
+            <div class="segment-header">
+                <div class="segment-number">Segment One</div>
+                <h2 class="segment-title">The Fire</h2>
+            </div>
+            <p class="narration">
+                A forest fire doesn't just burn trees. It changes soil chemistry. Alters water flow. Disrupts animal migration patterns. Triggers seed germination timing. Breaks mycorrhizal networks underground. Everything organized around that ecosystem—gone. You know this feeling. Not just missing a person. Missing the infrastructure. The morning routines. The weekend plans. The inside jokes. The future you were building. The version of yourself that made sense in that context. Your friends say "you'll meet someone else." Like replacing one tree fixes ecosystem collapse. But you're not mourning a tree. You're mourning the forest. And your nervous system knows the difference.
+            </p>
+            <div class="visual-container">
+                <div class="ecosystem-web" id="ecosystemWeb">
+                    <div class="web-center web-node">Relationship</div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">What Burned?</div>
+                <p style="text-align: center; color: var(--black); margin-bottom: 20px; font-size: 0.9rem; opacity: 0.7;">Click to reveal what you lost beyond the person</p>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="revealLayer('routines')">Routines</button>
+                    <button class="choice-btn" onclick="revealLayer('future')">Future Plans</button>
+                    <button class="choice-btn" onclick="revealLayer('identity')">Identity</button>
+                    <button class="choice-btn" onclick="revealLayer('nervous')">Nervous System</button>
+                </div>
+                <div class="response-text" id="layerResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">You're not being dramatic. Ecosystem collapse is collapse.</div>
+            </div>
+        </div>
+        
+        <!-- Segment 2: The Silence -->
+        <div class="segment" id="segment2">
+            <div class="segment-header">
+                <div class="segment-number">Segment Two</div>
+                <h2 class="segment-title">The Silence</h2>
+            </div>
+            <p class="narration">
+                Right after a major fire, researchers document something called "ecological silence." The usual soundscape—gone. Bird calls, insect buzz, rustling undergrowth, flowing water. Quiet. Not because the forest is dead. Because the system is recalibrating. Animals displaced. Migration patterns disrupted. Food chains reorganizing. Everything processing what happened. This silence can last weeks. Months. Sometimes a full season. Ecologists don't call this "failure to recover." They call it "shock phase." Essential. Necessary. The system stabilizing before reorganization begins. Your numbness isn't broken. Your "not feeling anything" isn't wrong. Your "going through the motions" isn't weakness. You're in ecological silence. The system processing disruption. Not stuck. Recalibrating.
+            </p>
+            <div class="visual-container">
+                <div class="silence-visual">
+                    <div class="sound-wave"><div class="wave-line"></div></div>
+                    <div class="sound-wave"><div class="wave-line"></div></div>
+                    <div class="sound-wave"><div class="wave-line"></div></div>
+                    <div class="silence-text">Ecological Silence</div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">What Silence Feels Like</div>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="validateSilence('numb')">Numb</button>
+                    <button class="choice-btn" onclick="validateSilence('motions')">Going Through Motions</button>
+                    <button class="choice-btn" onclick="validateSilence('empty')">Empty</button>
+                    <button class="choice-btn" onclick="validateSilence('still')">Just Still</button>
+                </div>
+                <div class="response-text" id="silenceResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">Silence isn't emptiness. It's the pause before reorganization.</div>
+            </div>
+        </div>
+        
+        <!-- Segment 3: Pioneer Species -->
+        <div class="segment" id="segment3">
+            <div class="segment-header">
+                <div class="segment-number">Segment Three</div>
+                <h2 class="segment-title">Pioneer Species</h2>
+            </div>
+            <p class="narration">
+                After fire, the first sign of recovery isn't dramatic. Not the return of towering pines or mighty oaks. Something smaller. So small you might miss it. Ecologists call them pioneer species. Lichens. Mosses. Fireweed. Tiny plants that thrive in harsh, nutrient-poor, recently burned soil. They look insignificant. But they're essential. They stabilize soil. Fix nitrogen. Create conditions for the next succession stage. Without them, nothing else can grow. Your "got out of bed today" is fireweed. Your "texted a friend back" is lichen. Your "ate something healthy" is moss. Not impressive. Not Instagram-worthy. Not climax forest. But pioneer species. Establishing conditions. Building foundation. Making future growth possible. The forest doesn't shame itself for not being oak trees yet.
+            </p>
+            <div class="visual-container">
+                <div class="pioneer-landscape" id="pioneerLandscape">
+                    <div class="ground-line"></div>
+                    <div class="click-prompt" id="clickPrompt">Click anywhere to plant pioneer species</div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">Your Pioneer Species</div>
+                <p style="text-align: center; color: var(--black); margin-bottom: 20px; font-size: 0.9rem; opacity: 0.7;">Small wins are foundation-building</p>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="trackWin('bed')">Got Out of Bed</button>
+                    <button class="choice-btn" onclick="trackWin('shower')">Showered</button>
+                    <button class="choice-btn" onclick="trackWin('friend')">Texted Friend</button>
+                    <button class="choice-btn" onclick="trackWin('meal')">Ate a Meal</button>
+                </div>
+                <div class="response-text" id="winResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">Pioneer species don't apologize for being small. Neither should you.</div>
+            </div>
+        </div>
+        
+        <!-- Segment 4: Succession Stages -->
+        <div class="segment" id="segment4">
+            <div class="segment-header">
+                <div class="segment-number">Segment Four</div>
+                <h2 class="segment-title">Succession Stages</h2>
+            </div>
+            <p class="narration">
+                Forest ecologists map recovery in stages. Pioneer species → intermediate species → climax community. Each stage creates conditions for the next. You can't skip stages. You can't plant oak trees in fresh ash. The soil isn't ready. The nutrients aren't there. The conditions don't support it. Trying to force climax forest before pioneer species establish? The saplings die. The ecosystem can't sustain them. Your healing follows the same pattern. No contact with your ex? That's removing invasive species (essential in pioneer stage). Journaling every morning? That's soil building (creating nutrient base). Exercise routine? That's establishing new growth patterns (intermediate stage). You're not doing "self-care." You're doing ecological succession. And you can't skip stages. Your nervous system isn't ready for "new relationship" (climax forest) if you're still in pioneer species phase. The soil isn't ready.
+            </p>
+            <div class="visual-container">
+                <div class="succession-chart">
+                    <div class="succession-stage" onclick="showStage(1)">
+                        <div class="stage-icon">🌱</div>
+                        <div class="stage-label">Pioneer</div>
+                        <div class="stage-desc">Small actions</div>
+                    </div>
+                    <div class="succession-stage" onclick="showStage(2)">
+                        <div class="stage-icon">🌿</div>
+                        <div class="stage-label">Intermediate</div>
+                        <div class="stage-desc">New routines</div>
+                    </div>
+                    <div class="succession-stage" onclick="showStage(3)">
+                        <div class="stage-icon">🌳</div>
+                        <div class="stage-label">Climax</div>
+                        <div class="stage-desc">Wholeness</div>
+                    </div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">Where Are You?</div>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="mapStage('shock')">Still in Shock</button>
+                    <button class="choice-btn" onclick="mapStage('small')">Small Things Daily</button>
+                    <button class="choice-btn" onclick="mapStage('routine')">Building Routines</button>
+                    <button class="choice-btn" onclick="mapStage('whole')">Feeling Whole</button>
+                </div>
+                <div class="response-text" id="stageResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">You're not behind. You're in the stage your soil can support.</div>
+            </div>
+        </div>
+        
+        <!-- Segment 5: The Keystone -->
+        <div class="segment" id="segment5">
+            <div class="segment-header">
+                <div class="segment-number">Segment Five</div>
+                <h2 class="segment-title">The Keystone</h2>
+            </div>
+            <p class="narration">
+                In 1995, wolves disappeared from Yellowstone. Ecologists expected: fewer wolves. What happened: ecosystem collapse. Elk populations exploded (no predator pressure). Overgrazing destroyed riverbanks. Erosion increased. Trees couldn't establish. Songbird populations crashed (no trees). Beaver dams disappeared (no trees for building). River courses changed (no beaver dams, no stabilized banks). Removing one species—wolves—changed everything. They were keystone species. Not because they were important. Because the entire ecosystem was organized around their presence. Your relationship was keystone species. You're not missing them. You're missing the ecosystem their presence maintained. The routines. The identity. The future plans. The nervous system calibration. All structured around that keystone. When keystone disappears, everything reorganizes. That's not you being weak. That's ecology.
+            </p>
+            <div class="visual-container">
+                <div class="keystone-visual" id="keystoneVisual">
+                    <div class="cascade-item" style="top: 15%; left: 15%; animation-delay: 0.2s;">Routines</div>
+                    <div class="cascade-item" style="top: 40%; right: 20%; animation-delay: 0.4s;">Friends</div>
+                    <div class="cascade-item" style="bottom: 30%; left: 25%; animation-delay: 0.6s;">Identity</div>
+                    <div class="cascade-item" style="top: 65%; right: 15%; animation-delay: 0.8s;">Future Plans</div>
+                    <div class="cascade-item" style="bottom: 15%; left: 50%; transform: translateX(-50%); animation-delay: 1s;">Nervous System</div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">Your Cascade Effects</div>
+                <p style="text-align: center; color: var(--black); margin-bottom: 20px; font-size: 0.9rem; opacity: 0.7;">What reorganized when the keystone disappeared?</p>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="acknowledgeCascade('social')">Social Life</button>
+                    <button class="choice-btn" onclick="acknowledgeCascade('work')">Work Patterns</button>
+                    <button class="choice-btn" onclick="acknowledgeCascade('self')">Sense of Self</button>
+                    <button class="choice-btn" onclick="acknowledgeCascade('future')">Future Vision</button>
+                </div>
+                <div class="response-text" id="cascadeResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">Keystone absence reorganizes everything. That's the pattern, not personal failure.</div>
+            </div>
+        </div>
+        
+        <!-- Segment 6: New Forest -->
+        <div class="segment" id="segment6">
+            <div class="segment-header">
+                <div class="segment-number">Segment Six</div>
+                <h2 class="segment-title">New Forest</h2>
+            </div>
+            <p class="narration">
+                Here's what ecologists know: post-fire forest is never identical to pre-fire forest. Fire changes soil composition. Different species establish. New patterns emerge. Maybe lodgepole pines instead of spruce. Maybe aspen groves where there were none. Different understory. Different wildlife. Different mycorrhizal networks. Not better or worse. Different. The forest doesn't mourn its previous composition. It doesn't try to force old species into new conditions. It allows what wants to grow in this soil. You won't be who you were before the relationship. You won't be who you were in it. You'll be new forest. Different species composition. Different patterns. Different ecosystem. Still forest. Still whole. Still alive. Just different. And that's not failure. That's ecology.
+            </p>
+            <div class="visual-container">
+                <div class="new-forest">
+                    <div class="forest-element">🌱</div>
+                    <div class="forest-element">🌿</div>
+                    <div class="forest-element">🌳</div>
+                    <div class="forest-element">🦋</div>
+                </div>
+            </div>
+            <div class="interactive-box">
+                <div class="interactive-title">Seed Your New Forest</div>
+                <p style="text-align: center; color: var(--black); margin-bottom: 20px; font-size: 0.9rem; opacity: 0.7;">What are you cultivating?</p>
+                <div class="choice-grid">
+                    <button class="choice-btn" onclick="seedForest('hobbies')">New Hobbies</button>
+                    <button class="choice-btn" onclick="seedForest('friends')">Friendships</button>
+                    <button class="choice-btn" onclick="seedForest('awareness')">Self-Awareness</button>
+                    <button class="choice-btn" onclick="seedForest('boundaries')">Boundaries</button>
+                    <button class="choice-btn" onclick="seedForest('independence')">Independence</button>
+                    <button class="choice-btn" onclick="seedForest('peace')">Inner Peace</button>
+                </div>
+                <div class="response-text" id="forestResponse"></div>
+            </div>
+            <div class="pro-tip">
+                <div class="pro-tip-label">Pattern Recognition</div>
+                <div class="pro-tip-text">New forest isn't wrong forest. It's the forest this soil can grow.</div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="nav-container" id="navContainer">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousSegment()">← Previous</button>
+            <div class="segment-indicator" id="segmentIndicator">Segment 1 of 6</div>
+            <button class="nav-btn next" id="nextBtn" onclick="nextSegment()">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Completion Screen -->
+    <div class="completion-screen" id="completionScreen">
+        <div class="completion-icon">🌳</div>
+        <h2 class="completion-title">New Forest Established</h2>
+        <p class="completion-message">
+            You've observed the full succession cycle. From fire to silence to pioneer species to climax forest. Different ecosystem. Still whole. Pattern recognized.
+        </p>
+        <div class="badge-collection">
+            <div class="badge">🔥</div>
+            <div class="badge">🤫</div>
+            <div class="badge">🌱</div>
+            <div class="badge">📊</div>
+            <div class="badge">🔑</div>
+            <div class="badge">🌳</div>
+        </div>
+        <button class="restart-btn" onclick="restartEpisode()">Experience Again</button>
+        <br><br>
+        <a href="https://mindlabs.forteen.in" style="color: var(--white); text-decoration: none; font-family: var(--font-brand); letter-spacing: 0.2em; font-size: 0.9rem; font-weight: 600;">← RETURN TO HUB</a>
+        
+        <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(0,0,0,0.2); max-width: 600px; margin-left: auto; margin-right: auto;">
+            <p style="font-size: 0.85rem; color: var(--black); opacity: 0.6; line-height: 1.6; margin-bottom: 15px;">
+                © 2026 FORTEEN MIND LABS. All rights reserved.
+            </p>
+            <p style="font-size: 0.75rem; color: var(--black); opacity: 0.5; line-height: 1.5;">
+                Pattern recognition, not prescription. We show you the game. You decide if you want to play.
+            </p>
+            <p style="font-size: 0.75rem; margin-top: 15px;">
+                <a href="https://mindlabs.forteen.in/privacy.html" style="color: var(--black); opacity: 0.6; text-decoration: none; margin-right: 20px;">Privacy Policy</a>
+                <a href="https://mindlabs.forteen.in/terms.html" style="color: var(--black); opacity: 0.6; text-decoration: none;">Terms of Use</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        let currentSegment = 1;
+        const totalSegments = 6;
+        
+        window.addEventListener('load', () => {
+            updateProgress();
+            updateNavigation();
+            initializeEcosystemWeb();
+        });
+        
+        function initializeEcosystemWeb() {
+            const web = document.getElementById('ecosystemWeb');
+            const nodes = [
+                { label: 'Routines', x: 25, y: 20 },
+                { label: 'Friends', x: 75, y: 20 },
+                { label: 'Future', x: 85, y: 55 },
+                { label: 'Identity', x: 65, y: 82 },
+                { label: 'Hobbies', x: 20, y: 75 },
+                { label: 'Self', x: 12, y: 45 }
+            ];
+            nodes.forEach((node, i) => {
+                const nodeEl = document.createElement('div');
+                nodeEl.className = 'web-node';
+                nodeEl.textContent = node.label;
+                nodeEl.style.left = node.x + '%';
+                nodeEl.style.top = node.y + '%';
+                web.appendChild(nodeEl);
+                const line = document.createElement('div');
+                line.className = 'web-line';
+                const centerX = 50, centerY = 50;
+                const dx = node.x - centerX, dy = node.y - centerY;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                line.style.width = length + '%';
+                line.style.left = centerX + '%';
+                line.style.top = centerY + '%';
+                line.style.transform = `rotate(${angle}deg)`;
+                web.appendChild(line);
+            });
+        }
+        
+        let revealedLayers = [];
+        function revealLayer(layer) {
+            if (revealedLayers.includes(layer)) return;
+            revealedLayers.push(layer);
+            const responses = {
+                routines: "Morning coffee timing. Weekend plans. Sleep schedules. All organized around them.",
+                future: "The trips you were planning. The home you'd share. The kids' names you'd chosen. Future collapsed.",
+                identity: "Who you were with them. The jokes, the roles, the version of yourself in that context. Gone.",
+                nervous: "Your whole system calibrated to their presence. Stress responses, safety cues, baseline state. Reorganizing."
+            };
+            const response = document.getElementById('layerResponse');
+            response.textContent = responses[layer];
+            response.classList.add('show');
+            event.target.classList.add('selected');
+            setTimeout(() => {
+                const nodes = document.querySelectorAll('.web-node:not(.web-center)');
+                const lines = document.querySelectorAll('.web-line');
+                nodes.forEach(n => n.classList.add('burned'));
+                lines.forEach(l => l.classList.add('burned'));
+            }, 500);
+        }
+        
+        function validateSilence(state) {
+            const responses = {
+                numb: "System recalibrating. Not broken. Processing.",
+                motions: "Shock phase active. Essential. Temporary.",
+                empty: "Ecological silence. The pause before reorganization.",
+                still: "Stillness as active state. Not failure. Stabilization."
+            };
+            const response = document.getElementById('silenceResponse');
+            response.textContent = responses[state];
+            response.classList.add('show');
+            event.target.classList.add('selected');
+        }
+        
+        let plantCount = 0;
+        function addPioneerPlant(e) {
+            const landscape = document.getElementById('pioneerLandscape');
+            const rect = landscape.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const xPercent = (x / rect.width) * 100;
+            const plant = document.createElement('div');
+            plant.className = 'pioneer-plant';
+            plant.style.left = xPercent + '%';
+            landscape.appendChild(plant);
+            setTimeout(() => plant.classList.add('sprouting'), 10);
+            plantCount++;
+            const prompt = document.getElementById('clickPrompt');
+            if (plantCount === 1) {
+                prompt.style.opacity = '0.2';
+            }
+            if (plantCount > 15) {
+                prompt.textContent = 'Pioneer species establishing...';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const landscape = document.getElementById('pioneerLandscape');
+            if (landscape) {
+                landscape.addEventListener('click', addPioneerPlant);
+            }
+        });
+        
+        function trackWin(win) {
+            const responses = {
+                bed: "Pioneer species. Essential foundation. Soil stabilizing.",
+                shower: "Small action. Big significance. Growth conditions forming.",
+                friend: "Social connection reestablishing. Symbiotic relationships returning.",
+                meal: "Self-care as ecosystem building. Nutrient cycling active."
+            };
+            const response = document.getElementById('winResponse');
+            response.textContent = responses[win];
+            response.classList.add('show');
+            event.target.classList.add('selected');
+        }
+        
+        function mapStage(stage) {
+            const responses = {
+                shock: "Stage 1: Silence. System processing. No timeline. Just presence.",
+                small: "Stage 2: Pioneer Species. Building foundation. Soil preparing.",
+                routine: "Stage 3: Intermediate Growth. Patterns establishing. Ecosystem forming.",
+                whole: "Stage 4: Climax Community. New forest. Different. Whole."
+            };
+            const response = document.getElementById('stageResponse');
+            response.textContent = responses[stage];
+            response.classList.add('show');
+            event.target.classList.add('selected');
+        }
+        
+        function showStage(num) {}
+        
+        function acknowledgeCascade(area) {
+            const responses = {
+                social: "Friends organized around couple activities. Now reorganizing. That's ecology, not abandonment.",
+                work: "Work schedule, goals, energy—all structured around relationship. Now rebuilding. System adaptation.",
+                self: "Identity defined in relationship context. Now reforming. Not lost. Reorganizing.",
+                future: "Plans built on partnership foundation. Now replanning. Different future. Still possible."
+            };
+            const response = document.getElementById('cascadeResponse');
+            response.textContent = responses[area];
+            response.classList.add('show');
+            event.target.classList.add('selected');
+        }
+        
+        let seedCount = 0;
+        function seedForest(seed) {
+            const btn = event.target;
+            btn.classList.add('selected');
+            seedCount++;
+            const response = document.getElementById('forestResponse');
+            if (seedCount === 1) {
+                response.textContent = "First species planted. Your forest beginning.";
+            } else if (seedCount === 3) {
+                response.textContent = "Ecosystem diversifying. Different from before. Uniquely yours.";
+            } else if (seedCount >= 5) {
+                response.textContent = "New forest established. Not identical to old. Still whole. Still alive.";
+            }
+            response.classList.add('show');
+        }
+        
+        function updateProgress() {
+            const progress = (currentSegment / totalSegments) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentSegment === 1;
+            document.getElementById('segmentIndicator').textContent = `Segment ${currentSegment} of ${totalSegments}`;
+            if (currentSegment === totalSegments) {
+                document.getElementById('nextBtn').textContent = 'Complete →';
+            }
+        }
+        
+        function nextSegment() {
+            if (currentSegment < totalSegments) {
+                document.getElementById(`segment${currentSegment}`).classList.remove('active');
+                currentSegment++;
+                document.getElementById(`segment${currentSegment}`).classList.add('active');
+                updateProgress();
+                updateNavigation();
+                window.scrollTo(0, 0);
+            } else {
+                showCompletion();
+            }
+        }
+        
+        function previousSegment() {
+            if (currentSegment > 1) {
+                document.getElementById(`segment${currentSegment}`).classList.remove('active');
+                currentSegment--;
+                document.getElementById(`segment${currentSegment}`).classList.add('active');
+                updateProgress();
+                updateNavigation();
+                window.scrollTo(0, 0);
+            }
+        }
+        
+        function showCompletion() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('completionScreen').classList.add('active');
+            document.getElementById('progressFill').style.width = '100%';
+        }
+        
+        function restartEpisode() {
+            currentSegment = 1;
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('completionScreen').classList.remove('active');
+            for (let i = 1; i <= totalSegments; i++) {
+                document.getElementById(`segment${i}`).classList.remove('active');
+            }
+            document.getElementById('segment1').classList.add('active');
+            revealedLayers = [];
+            plantCount = 0;
+            seedCount = 0;
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.response-text').forEach(txt => txt.classList.remove('show'));
+            document.querySelectorAll('.pioneer-plant').forEach(p => p.remove());
+            document.getElementById('clickPrompt').style.opacity = '0.4';
+            document.getElementById('clickPrompt').textContent = 'Click anywhere to plant pioneer species';
+            updateProgress();
+            updateNavigation();
+            window.scrollTo(0, 0);
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSegment();
+            if (e.key === 'ArrowLeft') previousSegment();
+        });
+    </script>
+</body>
+</html>
